@@ -19,6 +19,11 @@ A new Flutter application.
 ― マップ、コスト別に自分の過去の戦績を登録することができる  
 ― 兵科ごとの勝率、機体ごとの勝率、編成ごとの勝率、時間帯別勝率（グラフ）、負け予想を覆した割合、勝ち予想が覆った割合を見る事ができる
 
+## DB構成
+### 【機体一覧テーブル】
+|id|機体名|兵科|地上出撃可否|宇宙出撃可否|出撃可能コスト帯|
+|:---|:---|:---|:---|:---|:---|
+|int|String|String|bool|bool|String(Listをjsonへ変換)|
 This project is a starting point for a Flutter application.
 
 A few resources to get you started if this is your first Flutter project:
