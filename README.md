@@ -25,7 +25,10 @@ A new Flutter application.
 |:---|:---|:---|:---|:---|:---|
 |int|String|String|bool|bool|String(Listをjsonへ変換)|  
 
-
+### 【過去戦績テーブル】
+|id|地上か宇宙か|マップ名|コスト|出撃時間帯|出撃曜日|選択兵科|機体id|チームの人数|強襲の数|汎用の数|支援の数|試合前勝ち負け予想|試合結果|
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+|int|String|String|int|int(HHmm)|int(0~7)|String|int|int|int|int|int|int  (0:負け  1:勝ち  2:引き分け)|int  (0:負け  1:勝ち  2:引き分け)|  
 
 - [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
