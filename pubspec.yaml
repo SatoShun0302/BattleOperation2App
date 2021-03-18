@@ -30,7 +30,7 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   # 状態管理ツール
-  get: ^3.26.0
+  get: ^4.0.0-nullsafety.2
 
 dev_dependencies:
   flutter_test:
