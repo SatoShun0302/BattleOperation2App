@@ -31,6 +31,8 @@ dependencies:
 
   # 状態管理ツール
   get: ^4.0.0-nullsafety.2
+  # データベース
+  sqflite: ^2.0.0+3
 
 dev_dependencies:
   flutter_test:
