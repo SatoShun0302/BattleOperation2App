@@ -34,6 +34,12 @@ dependencies:
   # データベース
   sqflite: ^2.0.0+3
 
+  #
+  # ここから画面表示にまつわるライブラリ
+  #
+  # ページ下部メニューボタン
+  convex_bottom_bar: ^3.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
