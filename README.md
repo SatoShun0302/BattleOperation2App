@@ -1,6 +1,6 @@
 # battle_operation2_app
 
-A new Flutter application.
+* [ページ一覧と機能概要](##ページ一覧と機能概要)
 
 ## ページ一覧と機能概要
 ### 【メインページ】
@@ -57,9 +57,3 @@ A new Flutter application.
 - 動画投稿者からの更新を知らせるプッシュ通知（未定）  
 
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
