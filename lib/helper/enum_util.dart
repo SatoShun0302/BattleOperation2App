@@ -1,0 +1,31 @@
+import 'package:battle_operation2_app/importer/myclass_importer.dart';
+
+/// Enumの値を参照し、文字列や数値、条件といった値を返すメソッドを記述するクラス
+class EnumUtil {
+
+  /// MSタイプを返す
+  ///
+  /// @param MobileSuitType @return String
+  static String mobileSuitType(MobileSuitType msType) {
+    switch (msType) {
+      case MobileSuitType.General:
+        return "汎用";
+      case MobileSuitType.Support:
+        return "支援";
+      case MobileSuitType.Raid:
+        return "強襲";
+    }
+  }
+
+  /// フィールドタイプを返す
+  ///
+  /// @param FieldType @return String
+  static String fieldType(FieldType field) {
+    switch (field) {
+      case FieldType.Ground:
+        return "地上";
+      case FieldType.Space:
+        return "宇宙";
+    }
+  }
+}
