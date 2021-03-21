@@ -5,11 +5,11 @@ import 'package:battle_operation2_app/importer/dart_importer.dart';
 /// 画面サイズやそれに依存するデザインで使用する定数クラス
 class ScreenEnv {
 
-  static double _deviceWidth;
-  static double _deviceHeight;
+  static double _deviceWidth = 0;
+  static double _deviceHeight = 0;
   static set deviceWidth(double width) => _deviceWidth = width;
   static set deviceHeight(double height) => _deviceHeight = height;
-  static get deviceWidth => _deviceWidth;
-  static get deviceHeight => _deviceHeight;
+  static double get deviceWidth => _deviceWidth;
+  static double get deviceHeight => _deviceHeight;
 
 }

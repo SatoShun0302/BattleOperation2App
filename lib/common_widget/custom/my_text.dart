@@ -8,9 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 
-
-// Examples can assume:
-// late String _name;
+/// textScaleFactorを1としたカスタムText()
 
 /// The text style to apply to descendant [Text] widgets which don't have an
 /// explicit style.
@@ -36,14 +34,14 @@ class DefaultTextStyle extends InheritedTheme {
   /// it is not null, it must be greater than zero.
   const DefaultTextStyle({
     Key? key,
-    @required this.style,
+    required this.style,
     this.textAlign,
     this.softWrap = true,
     this.overflow = TextOverflow.clip,
     this.maxLines,
     this.textWidthBasis = TextWidthBasis.parent,
     this.textHeightBehavior,
-    @required Widget child,
+    required Widget child,
   }) : assert(style != null),
         assert(softWrap != null),
         assert(overflow != null),
@@ -59,7 +57,7 @@ class DefaultTextStyle extends InheritedTheme {
   /// This constructor creates a [DefaultTextStyle] with an invalid [child], which
   /// means the constructed value cannot be incorporated into the tree.
   const DefaultTextStyle.fallback({ Key? key })
-      : style = const TextStyle(),
+      : style = const TextStyle(color: Colors.black),
         textAlign = null,
         softWrap = true,
         maxLines = null,
@@ -92,7 +90,7 @@ class DefaultTextStyle extends InheritedTheme {
     TextOverflow? overflow,
     int? maxLines,
     TextWidthBasis? textWidthBasis,
-    @required Widget child,
+    required Widget child,
   }) {
     assert(child != null);
     return Builder(
@@ -275,88 +273,34 @@ class DefaultTextHeightBehavior extends InheritedTheme {
   }
 }
 
-/// A run of text with a single style.
+/// Key? key,
 ///
-/// The [Text] widget displays a string of text with single style. The string
-/// might break across multiple lines or might all be displayed on the same line
-/// depending on the layout constraints.
+/// this.style,
 ///
-/// The [style] argument is optional. When omitted, the text will use the style
-/// from the closest enclosing [DefaultTextStyle]. If the given style's
-/// [TextStyle.inherit] property is true (the default), the given style will
-/// be merged with the closest enclosing [DefaultTextStyle]. This merging
-/// behavior is useful, for example, to make the text bold while using the
-/// default font family and size.
+/// this.strutStyle,
 ///
-/// {@tool snippet}
+/// this.textAlign,
 ///
-/// This example shows how to display text using the [Text] widget with the
-/// [overflow] set to [TextOverflow.ellipsis].
+/// this.textDirection,
 ///
-/// ![If the text is shorter than the available space, it is displayed in full without an ellipsis.](https://flutter.github.io/assets-for-api-docs/assets/widgets/text.png)
+/// this.locale,
 ///
-/// ![If the text overflows, the Text widget displays an ellipsis to trim the overflowing text](https://flutter.github.io/assets-for-api-docs/assets/widgets/text_ellipsis.png)
+/// this.softWrap,
 ///
-/// ```dart
-/// Text(
-///   'Hello, $_name! How are you?',
-///   textAlign: TextAlign.center,
-///   overflow: TextOverflow.ellipsis,
-///   style: TextStyle(fontWeight: FontWeight.bold),
-/// )
-/// ```
-/// {@end-tool}
+/// this.overflow,
 ///
-/// Using the [Text.rich] constructor, the [Text] widget can
-/// display a paragraph with differently styled [TextSpan]s. The sample
-/// that follows displays "Hello beautiful world" with different styles
-/// for each word.
+/// this.textScaleFactor = 1,
 ///
-/// {@tool snippet}
+/// this.maxLines,
 ///
-/// ![The word "Hello" is shown with the default text styles. The word "beautiful" is italicized. The word "world" is bold.](https://flutter.github.io/assets-for-api-docs/assets/widgets/text_rich.png)
+/// this.semanticsLabel,
 ///
-/// ```dart
-/// const Text.rich(
-///   TextSpan(
-///     text: 'Hello', // default text style
-///     children: <TextSpan>[
-///       TextSpan(text: ' beautiful ', style: TextStyle(fontStyle: FontStyle.italic)),
-///       TextSpan(text: 'world', style: TextStyle(fontWeight: FontWeight.bold)),
-///     ],
-///   ),
-/// )
-/// ```
-/// {@end-tool}
+/// this.textWidthBasis,
 ///
-/// ## Interactivity
+/// this.textHeightBehavior,
 ///
-/// To make [Text] react to touch events, wrap it in a [GestureDetector] widget
-/// with a [GestureDetector.onTap] handler.
-///
-/// In a material design application, consider using a [TextButton] instead, or
-/// if that isn't appropriate, at least using an [InkWell] instead of
-/// [GestureDetector].
-///
-/// To make sections of the text interactive, use [RichText] and specify a
-/// [TapGestureRecognizer] as the [TextSpan.recognizer] of the relevant part of
-/// the text.
-///
-/// See also:
-///
-///  * [RichText], which gives you more control over the text styles.
-///  * [DefaultTextStyle], which sets default styles for [Text] widgets.
 class Text extends StatelessWidget {
-  /// Creates a text widget.
-  ///
-  /// If the [style] argument is null, the text will use the style from the
-  /// closest enclosing [DefaultTextStyle].
-  ///
-  /// The [data] parameter must not be null.
-  ///
-  /// The [overflow] property's behavior is affected by the [softWrap] argument.
-  /// If the [softWrap] is true or null, the glyph causing overflow, and those that follow,
-  /// will not be rendered. Otherwise, it will be shown with the given overflow option.
+
   const Text(
       String this.data, {
         Key? key,
@@ -367,7 +311,7 @@ class Text extends StatelessWidget {
         this.locale,
         this.softWrap,
         this.overflow,
-        this.textScaleFactor,
+        this.textScaleFactor = 1,
         this.maxLines,
         this.semanticsLabel,
         this.textWidthBasis,

@@ -1,4 +1,6 @@
 
 class DatabaseEnv {
+ void test() {
 
+ }
 }

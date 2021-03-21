@@ -1,4 +1,6 @@
 
 class NotificationEnv {
-  
+  void test(){
+
+  }
 }

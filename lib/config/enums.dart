@@ -1,7 +1,11 @@
 /**
  * enumは全てこのファイルに定義する
  */
-
+/// null safety版ではクラス及びメソッドが定義されていないファイルのexportができないため
+/// dummyクラスとdummyメソッドを記述する
+class dummyEnum {
+  void dummy() {}
+}
 /// MSのタイプ
 enum MobileSuitType {
   General,

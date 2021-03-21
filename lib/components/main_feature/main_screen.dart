@@ -1,6 +1,7 @@
 import 'package:battle_operation2_app/importer/myclass_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
 import 'package:battle_operation2_app/importer/dart_importer.dart';
+import 'package:battle_operation2_app/common_widget/custom/my_text.dart' as myText;
 
 /// アプリ起動後最初に表示される画面
 class MainScreen extends StatelessWidget {
@@ -23,6 +24,7 @@ class MainScreen extends StatelessWidget {
       // Replace the 8 lines Navigator.push by a simple Get.to(). You don't need context
       body: Column(
         children: <Widget>[
+          // プレイヤーカード表示エリア
           Card(
             color: Colors.blue,
             margin: EdgeInsets.only(
@@ -48,10 +50,10 @@ class MainScreen extends StatelessWidget {
                               child: Column(
                                 children: <Widget>[
                                   Expanded(
-                                      child: Text("Name:"),
+                                      child: myText.Text("Name:"),
                                   ),
                                   Expanded(
-                                    child: Text("aaa"),
+                                    child: myText.Text("aaa"),
                                   ),
                                 ],
                               ),
@@ -62,10 +64,10 @@ class MainScreen extends StatelessWidget {
                               child: Column(
                                 children: <Widget>[
                                   Expanded(
-                                    child: Text("bbb"),
+                                    child: myText.Text("bbb"),
                                   ),
                                   Expanded(
-                                    child: Text("bbb"),
+                                    child: myText.Text("bbb"),
                                   ),
                                 ],
                               ),
@@ -91,12 +93,14 @@ class MainScreen extends StatelessWidget {
                         margin: EdgeInsets.only(
                             top: ScreenEnv.deviceHeight * 0.022,
                             bottom: ScreenEnv.deviceHeight * 0.022),
-                        child: Text("right")),
+                        child: myText.Text("right")),
                   ),
                 ),
               ],
             ),
           ),
+          // 現在のレーティングマッチ情報エリア
+          myText.Text("test"),
         ],
       ),
     );
