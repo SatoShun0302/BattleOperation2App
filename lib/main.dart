@@ -40,7 +40,7 @@ class Home extends StatelessWidget {
     ScreenEnv.deviceWidth = MediaQuery.of(context).size.width;
     ScreenEnv.deviceHeight = MediaQuery.of(context).size.height;
     // Instantiate your class using Get.put() to make it available for all "child" routes there.
-    final Controller c = Get.put(Controller());
+    final Controller c = Get.put(Controller())!;
 
     return Scaffold(
       // Use Obx(()=> to update Text() whenever count is changed.
