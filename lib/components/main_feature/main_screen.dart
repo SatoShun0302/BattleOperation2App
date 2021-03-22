@@ -1,7 +1,8 @@
 import 'package:battle_operation2_app/importer/myclass_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
 import 'package:battle_operation2_app/importer/dart_importer.dart';
-import 'package:battle_operation2_app/common_widget/custom/my_text.dart' as myText;
+import 'package:battle_operation2_app/common_widget/custom/my_text.dart'
+    as myText;
 
 /// アプリ起動後最初に表示される画面
 class MainScreen extends StatelessWidget {
@@ -45,34 +46,47 @@ class MainScreen extends StatelessWidget {
                       width: ScreenEnv.deviceWidth * 0.6,
                       margin: EdgeInsets.all(ScreenEnv.deviceHeight * 0.01),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Expanded(
-                              child: Container(
-                                child: Column(
-                                  children: <Widget>[
-                                    Expanded(
-                                        child: myText.Text("Name:"),
-                                    ),
-                                    Expanded(
-                                      child: myText.Text("aaa"),
-                                    ),
-                                  ],
-                                ),
-                              )
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                            ),
+                            margin: EdgeInsets.only(bottom: ScreenEnv.deviceHeight * 0.008),
+                            child: myText.Text(
+                              "Name :",
+                              style: TextStyle(
+                                  fontSize: ScreenEnv.deviceWidth * 0.05),
+                            ),
                           ),
-                          Expanded(
-                              child: Container(
-                                child: Column(
-                                  children: <Widget>[
-                                    Expanded(
-                                      child: myText.Text("bbb"),
-                                    ),
-                                    Expanded(
-                                      child: myText.Text("bbb"),
-                                    ),
-                                  ],
-                                ),
-                              )
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                            ),
+                            width: ScreenEnv.deviceWidth * 0.55,
+                            margin: EdgeInsets.only(left: ScreenEnv.deviceWidth * 0.03, bottom: ScreenEnv.deviceHeight * 0.030),
+                            child: myText.Text("がもたん",
+                              style: TextStyle(
+                                  fontSize: ScreenEnv.deviceWidth * 0.04),),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                            ),
+                            margin: EdgeInsets.only(bottom: ScreenEnv.deviceHeight * 0.008),
+                            child: myText.Text("PSID :",
+                              style: TextStyle(
+                                  fontSize: ScreenEnv.deviceWidth * 0.05),),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                            ),
+                            width: ScreenEnv.deviceWidth * 0.55,
+                            margin: EdgeInsets.only(left: ScreenEnv.deviceWidth * 0.03),
+                            child: myText.Text("Gamotan",
+                              style: TextStyle(
+                                  fontSize: ScreenEnv.deviceWidth * 0.04),),
                           ),
                         ],
                       ),
@@ -105,39 +119,54 @@ class MainScreen extends StatelessWidget {
               width: ScreenEnv.deviceWidth * 0.95,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Container(
-                          decoration: BoxDecoration(
-                            color: Colors.blueAccent,
-                          ),
-                          height: ScreenEnv.deviceHeight * 0.15,
-                          width: ScreenEnv.deviceWidth * 0.3,
-                          margin: EdgeInsets.only(
-                            bottom: ScreenEnv.deviceHeight * 0.012,
-                          ),
-                        ),
-                    Container(
-                          decoration: BoxDecoration(
-                            color: Colors.blueAccent,
-                          ),
-                          height: ScreenEnv.deviceHeight * 0.15,
-                      width: ScreenEnv.deviceWidth * 0.3,
-                          margin: EdgeInsets.only(
-                            bottom: ScreenEnv.deviceHeight * 0.012,
-                          ),
-                        ),
-                    Container(
-                          decoration: BoxDecoration(
-                            color: Colors.blueAccent,
-                          ),
-                          height: ScreenEnv.deviceHeight * 0.15,
-                      width: ScreenEnv.deviceWidth * 0.3,
-                          margin: EdgeInsets.only(
-                            bottom: ScreenEnv.deviceHeight * 0.012,
-                          ),
-                        ),
-                  ],
-                ),
+                children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black12,
+                    ),
+                    height: ScreenEnv.deviceHeight * 0.15,
+                    width: ScreenEnv.deviceWidth * 0.3,
+                    margin: EdgeInsets.only(
+                      bottom: ScreenEnv.deviceHeight * 0.012,
+                    ),
+                    child: Column(
+                      children: [
+                        myText.Text("map1"),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black12,
+                    ),
+                    height: ScreenEnv.deviceHeight * 0.15,
+                    width: ScreenEnv.deviceWidth * 0.3,
+                    margin: EdgeInsets.only(
+                      bottom: ScreenEnv.deviceHeight * 0.012,
+                    ),
+                    child: Column(
+                      children: [
+                        myText.Text("map2"),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black12,
+                    ),
+                    height: ScreenEnv.deviceHeight * 0.15,
+                    width: ScreenEnv.deviceWidth * 0.3,
+                    margin: EdgeInsets.only(
+                      bottom: ScreenEnv.deviceHeight * 0.012,
+                    ),
+                    child: Column(
+                      children: [
+                        myText.Text("map3"),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
             Container(
               decoration: BoxDecoration(
@@ -145,9 +174,7 @@ class MainScreen extends StatelessWidget {
               ),
               height: ScreenEnv.deviceHeight * 0.25,
               width: ScreenEnv.deviceWidth * 0.95,
-              margin: EdgeInsets.only(
-                  bottom: ScreenEnv.deviceHeight * 0.012
-              ),
+              margin: EdgeInsets.only(bottom: ScreenEnv.deviceHeight * 0.012),
               child: myText.Text("twitter 表示エリア"),
             ),
           ],
