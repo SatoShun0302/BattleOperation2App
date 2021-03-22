@@ -17,6 +17,7 @@ class DrawerMenu {
           title: Text('トップへ',
             textScaleFactor: 1,),
           onTap: () {
+            Get.off(() => MainScreen());
             print("0-0");
           },
         ),
@@ -80,6 +81,7 @@ class DrawerMenu {
           title: Text('過去戦績確認',
             textScaleFactor: 1,),
           onTap: () {
+            Get.off(() => MyBattleRecord());
             print("2-1");
           },
         ),
