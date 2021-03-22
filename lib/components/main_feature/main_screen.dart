@@ -22,86 +22,136 @@ class MainScreen extends StatelessWidget {
       ),
 
       // Replace the 8 lines Navigator.push by a simple Get.to(). You don't need context
-      body: Column(
-        children: <Widget>[
-          // プレイヤーカード表示エリア
-          Card(
-            color: Colors.blue,
-            margin: EdgeInsets.only(
-                top: ScreenEnv.deviceHeight * 0.015,
-                right: ScreenEnv.deviceHeight * 0.01,
-                bottom: ScreenEnv.deviceHeight * 0.015,
-                left: ScreenEnv.deviceHeight * 0.01),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.lightGreenAccent,
-                    ),
-                    height: ScreenEnv.deviceHeight * 0.2,
-                    width: ScreenEnv.deviceWidth * 0.6,
-                    margin: EdgeInsets.all(ScreenEnv.deviceHeight * 0.01),
-                    child: Column(
-                      children: <Widget>[
-                        Expanded(
-                            child: Container(
-                              child: Column(
-                                children: <Widget>[
-                                  Expanded(
-                                      child: myText.Text("Name:"),
-                                  ),
-                                  Expanded(
-                                    child: myText.Text("aaa"),
-                                  ),
-                                ],
-                              ),
-                            )
-                        ),
-                        Expanded(
-                            child: Container(
-                              child: Column(
-                                children: <Widget>[
-                                  Expanded(
-                                    child: myText.Text("bbb"),
-                                  ),
-                                  Expanded(
-                                    child: myText.Text("bbb"),
-                                  ),
-                                ],
-                              ),
-                            )
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.yellow,
-                    ),
-                    height: ScreenEnv.deviceHeight * 0.2,
-                    margin:
-                        EdgeInsets.only(right: ScreenEnv.deviceHeight * 0.01),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            // プレイヤーカード表示エリア
+            Card(
+              color: Colors.blue,
+              margin: EdgeInsets.only(
+                  top: ScreenEnv.deviceHeight * 0.015,
+                  right: ScreenEnv.deviceHeight * 0.01,
+                  bottom: ScreenEnv.deviceHeight * 0.015,
+                  left: ScreenEnv.deviceHeight * 0.01),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 2,
                     child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                        ),
-                        margin: EdgeInsets.only(
-                            top: ScreenEnv.deviceHeight * 0.022,
-                            bottom: ScreenEnv.deviceHeight * 0.022),
-                        child: myText.Text("right")),
+                      decoration: BoxDecoration(
+                        color: Colors.lightGreenAccent,
+                      ),
+                      height: ScreenEnv.deviceHeight * 0.2,
+                      width: ScreenEnv.deviceWidth * 0.6,
+                      margin: EdgeInsets.all(ScreenEnv.deviceHeight * 0.01),
+                      child: Column(
+                        children: <Widget>[
+                          Expanded(
+                              child: Container(
+                                child: Column(
+                                  children: <Widget>[
+                                    Expanded(
+                                        child: myText.Text("Name:"),
+                                    ),
+                                    Expanded(
+                                      child: myText.Text("aaa"),
+                                    ),
+                                  ],
+                                ),
+                              )
+                          ),
+                          Expanded(
+                              child: Container(
+                                child: Column(
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: myText.Text("bbb"),
+                                    ),
+                                    Expanded(
+                                      child: myText.Text("bbb"),
+                                    ),
+                                  ],
+                                ),
+                              )
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.yellow,
+                      ),
+                      height: ScreenEnv.deviceHeight * 0.2,
+                      margin:
+                          EdgeInsets.only(right: ScreenEnv.deviceHeight * 0.01),
+                      child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                          ),
+                          margin: EdgeInsets.only(
+                              top: ScreenEnv.deviceHeight * 0.022,
+                              bottom: ScreenEnv.deviceHeight * 0.022),
+                          child: myText.Text("right")),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          // 現在のレーティングマッチ情報エリア
-          myText.Text("test"),
-        ],
+            // 現在のレーティングマッチ情報エリア
+            Container(
+              width: ScreenEnv.deviceWidth * 0.95,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
+                          decoration: BoxDecoration(
+                            color: Colors.blueAccent,
+                          ),
+                          height: ScreenEnv.deviceHeight * 0.15,
+                          width: ScreenEnv.deviceWidth * 0.3,
+                          margin: EdgeInsets.only(
+                            bottom: ScreenEnv.deviceHeight * 0.012,
+                          ),
+                        ),
+                    Container(
+                          decoration: BoxDecoration(
+                            color: Colors.blueAccent,
+                          ),
+                          height: ScreenEnv.deviceHeight * 0.15,
+                      width: ScreenEnv.deviceWidth * 0.3,
+                          margin: EdgeInsets.only(
+                            bottom: ScreenEnv.deviceHeight * 0.012,
+                          ),
+                        ),
+                    Container(
+                          decoration: BoxDecoration(
+                            color: Colors.blueAccent,
+                          ),
+                          height: ScreenEnv.deviceHeight * 0.15,
+                      width: ScreenEnv.deviceWidth * 0.3,
+                          margin: EdgeInsets.only(
+                            bottom: ScreenEnv.deviceHeight * 0.012,
+                          ),
+                        ),
+                  ],
+                ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.lightBlueAccent,
+              ),
+              height: ScreenEnv.deviceHeight * 0.25,
+              width: ScreenEnv.deviceWidth * 0.95,
+              margin: EdgeInsets.only(
+                  bottom: ScreenEnv.deviceHeight * 0.012
+              ),
+              child: myText.Text("twitter 表示エリア"),
+            ),
+          ],
+        ),
       ),
     );
   }

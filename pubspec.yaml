@@ -34,6 +34,10 @@ dependencies:
   get: ^4.0.0-nullsafety.2
   # データベース
   sqflite: ^2.0.0+3
+  # webView and url luncher
+  webview_flutter: ^2.0.2
+  # html
+  flutter_html: ^2.0.0-nullsafety.0
 
   #
   # ここから画面表示にまつわるライブラリ
