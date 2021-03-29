@@ -42,7 +42,7 @@ class DrawerMenu {
   // プロフィール確認、編集
   Widget _profileListTile() {
     return ExpansionTile(
-      leading: Icon(Icons.account_circle),
+      leading: FaIcon(FontAwesomeIcons.addressCard),
       childrenPadding: EdgeInsets.only(left: ScreenEnv.deviceWidth * 0.1),
       title: Text(
         'プロフィール',

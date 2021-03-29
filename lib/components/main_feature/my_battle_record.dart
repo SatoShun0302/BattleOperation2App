@@ -9,38 +9,40 @@ class MyBattleRecord extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Container(
-          decoration: BoxDecoration(
-            color: Colors.lightGreenAccent,
-          ),
-
-          child: Row(
-            children: <Widget>[
-              GestureDetector(
-                child: myText.Text("地上戦績表示"),
-                onTap: () {
-                  print("ground");
-                },
-              ),
-              GestureDetector(
-                child: myText.Text("宇宙戦績表示"),
-                onTap: () {
-                  print("space");
-                },
-              ),
-            ],
-          ),
-        ),
-        actions: [
-        ],
+        title: myText.Text(""),
         backgroundColor: Colors.orange,
       ),
+      // ドロワーメニュー
       drawer: SafeArea(
         child: Drawer(
           child: new DrawerMenu().expansionPanelList(),
         ),
       ),
-
+      // ボトムメニュー
+      bottomNavigationBar: ConvexAppBar(
+        style: TabStyle.fixed,
+        height: ScreenEnv.deviceHeight * 0.08,
+        items: [
+          TabItem(icon: FaIcon(FontAwesomeIcons.globeAsia, color: Colors.white,), title: "地上戦績"),
+          TabItem(icon: Icons.analytics_outlined, title: "総合"),
+          TabItem(icon: FaIcon(FontAwesomeIcons.splotch, color: Colors.white,), title: "宇宙戦績"),
+        ],
+        initialActiveIndex: 1,
+        onTap: (int i) {
+          print(i);
+          switch(i) {
+            case 0:
+              print("index0");
+              break;
+            case 1:
+              print("index1");
+              break;
+            case 2:
+              print("index2");
+              break;
+          }
+        },
+      ),
       // Replace the 8 lines Navigator.push by a simple Get.to(). You don't need context
       body: SingleChildScrollView(
         child: Column(

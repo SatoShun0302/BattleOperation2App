@@ -17,3 +17,6 @@ export 'package:battle_operation2_app/config/enums.dart';
 // helper
 export 'package:battle_operation2_app/helper/enum_util.dart';
 
+// model
+export 'package:battle_operation2_app/model/my_battle_record_single.dart';
+
