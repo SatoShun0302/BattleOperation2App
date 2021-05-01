@@ -34,16 +34,22 @@ dependencies:
   get: ^4.0.0-nullsafety.2
   # データベース
   sqflite: ^2.0.0+3
+  # ローカルストレージ
+  shared_preferences: ^2.0.5
   # webView and url luncher
   webview_flutter: ^2.0.2
   # html
   flutter_html: ^2.0.0-nullsafety.0
+  # csv
+  csv: ^5.0.0
 
   #
   # ここから画面表示にまつわるライブラリ
   #
   # ページ下部メニューボタン
   convex_bottom_bar: ^3.0.0
+
+
 
 dev_dependencies:
   flutter_test:
@@ -61,7 +67,11 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
+  assets:
+    - assets/csv/ms_assult.csv
+    - assets/csv/ms_general.csv
+    - assets/csv/ms_support.csv
+    - assets/csv/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

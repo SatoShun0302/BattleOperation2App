@@ -21,12 +21,17 @@ enum FieldType {
 
 /// SharedPreferencesのkey一覧
 enum SharedPrefKey {
-  Profile,
-  LocalNotificationFlag,
-  PushNotificationFlag,
-  LoseMsVoteNumber,
-  WinMsVoteNumber,
-  CanVoteLoseMs,
-  CanVoteWinMs,
-  LastVoteDatetime
+  DoneFirstProcess, // アプリインストール後初回起動か否か
+  MadeDatabase, // データベースを作成済みかどうか
+  InsertedInitMsRecord, // 機体一覧初期データを挿入済みか否か
+  InsertedInitMapRecord, // マップ一覧初期データを挿入済みか否か
+  Profile, // プロフィール情報
+  LocalNotificationFlag, // ローカル通知フラグ
+  PushNotificationFlag, // プッシュ通知フラグ
+  LoseMsVoteNumber, // 負け機体投票回数
+  WinMsVoteNumber, // 勝ち機体投票回数
+  CanVoteLoseMs, // 負け機体投票可否フラグ
+  CanVoteWinMs, // 勝ち機体投票可否フラグ
+  LastVoteDatetime, //
+  VoteRightGrantDay // 投票権付与最終日
 }

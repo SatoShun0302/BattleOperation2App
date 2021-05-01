@@ -1,15 +1,65 @@
 import 'package:battle_operation2_app/common_widget/drawer_menu.dart';
 import 'package:battle_operation2_app/importer/myclass_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
+import 'package:battle_operation2_app/repository/map_list_repository.dart';
+import 'package:battle_operation2_app/repository/ms_list_repository.dart';
+import 'package:battle_operation2_app/service/init_function/check_vote_right.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-void main() {
+Future<void> main() async {
   // main関数内で非同期処理を行う際に必須となる記述
   WidgetsFlutterBinding.ensureInitialized();
   // 端末の向きを縦で固定
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  runApp(GetMaterialApp(home: MainScreen(),));
+  /**
+   * アプリ初回インストール時の処理
+   * - データベースの作成
+   * - csvから読み込んだ機体リストのinsert
+   * - csvから読み込んだマップリストのinsert
+   * - 投票権を所定数付与 付与日の登録
+   */
+  SharedPreferences _prefs = await SharedPreferences.getInstance();
+  if (_prefs.getBool(SharedPrefKey.DoneFirstProcess.toString()) == null ||
+      _prefs.getBool(SharedPrefKey.DoneFirstProcess.toString()) == false) {
+    // データベースの作成フラグを確認　未作成であった場合は作成する
+    if (_prefs.getBool(SharedPrefKey.MadeDatabase.toString()) == null ||
+        _prefs.getBool(SharedPrefKey.MadeDatabase.toString()) == false) {
+      MapListRepository mlr = new MapListRepository();
+      mlr.init();
+    }
+    // 初期機体データ挿入フラグを確認　未挿入であった場合はレコードを挿入する
+    if (_prefs.getBool(SharedPrefKey.InsertedInitMsRecord.toString()) == null ||
+        _prefs.getBool(SharedPrefKey.InsertedInitMsRecord.toString()) ==
+            false) {
+      MsListRepository mslr = new MsListRepository();
+      mslr.initInsertRecords();
+    }
+    // 初期マップデータ挿入フラグを確認　未挿入であった場合はレコードを挿入する
+    if (_prefs.getBool(SharedPrefKey.InsertedInitMapRecord.toString()) ==
+        null ||
+        _prefs.getBool(SharedPrefKey.InsertedInitMapRecord.toString()) ==
+            false) {
+      MapListRepository mlr = new MapListRepository();
+      mlr.initInsertRecords();
+    }
+    // 投票権を所定数付与
+
+    // 処理が成功したか否かに関わらず、初回起動済みフラグはtrueにする
+    _prefs.setBool(SharedPrefKey.DoneFirstProcess.toString(), true);
+  }
+  /**
+   * アプリ起動毎の処理
+   * - 投票権の付与
+   */
+  // 投票権を付与数を確認
+  CheckVoteRight cvr = new CheckVoteRight();
+  int _grantRightNumber = await cvr.isGrantedVoteRight();
+  _prefs.setBool(SharedPrefKey.DoneFirstProcess.toString(), false);
+
+  runApp(GetMaterialApp(
+    home: MainScreen(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -27,13 +77,13 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Controller extends GetxController{
+class Controller extends GetxController {
   var count = 0.obs;
+
   increment() => count++;
 }
 
 class Home extends StatelessWidget {
-
   @override
   Widget build(context) {
 // 画面サイズを取得しscreen_envへ格納する
@@ -44,22 +94,22 @@ class Home extends StatelessWidget {
 
     return Scaffold(
       // Use Obx(()=> to update Text() whenever count is changed.
-        appBar: AppBar(
-            title: Obx(() => Text("Clicks: ${c.count}")),
-          backgroundColor: Colors.orange,
+      appBar: AppBar(
+        title: Obx(() => Text("Clicks: ${c.count}")),
+        backgroundColor: Colors.orange,
+      ),
+      drawer: SafeArea(
+        child: Drawer(
+          child: new DrawerMenu().expansionPanelList(),
         ),
-        drawer: SafeArea(
-          child: Drawer(
-            child: new DrawerMenu().expansionPanelList(),
-          ),
-        ),
+      ),
 
-        // Replace the 8 lines Navigator.push by a simple Get.to(). You don't need context
-        body: Center(
-            child: TextButton(
-              child: Text('Click to show full example'),
-              onPressed: () => Navigator.of(context).pushNamed('/bar'),
-            )),
+      // Replace the 8 lines Navigator.push by a simple Get.to(). You don't need context
+      body: Center(
+          child: TextButton(
+        child: Text('Click to show full example'),
+        onPressed: () => Navigator.of(context).pushNamed('/bar'),
+      )),
       // bottomNavigationBar: ConvexAppBar(
       //   style: TabStyle.react,
       //   items: [
@@ -79,9 +129,8 @@ class Other extends StatelessWidget {
   final Controller c = Get.find();
 
   @override
-  Widget build(context){
+  Widget build(context) {
     // Access the updated count variable
     return Scaffold(body: Center(child: Text("${c.count}")));
   }
 }
-

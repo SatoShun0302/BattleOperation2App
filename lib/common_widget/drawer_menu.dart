@@ -1,6 +1,7 @@
 import 'package:battle_operation2_app/importer/myclass_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
 import 'package:battle_operation2_app/importer/dart_importer.dart';
+import 'package:battle_operation2_app/repository/map_list_repository.dart';
 
 
 /// ドロワーメニューを共通化
@@ -19,6 +20,14 @@ class DrawerMenu {
           onTap: () {
             Get.off(() => MainScreen());
             print("0-0");
+          },
+        ),
+        ListTile(
+          title: Text('DB作成',
+            textScaleFactor: 1,),
+          onTap: () {
+            MapListRepository mlr = new MapListRepository();
+            mlr.init();
           },
         ),
         _profileListTile(),
