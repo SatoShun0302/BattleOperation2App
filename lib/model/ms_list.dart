@@ -14,8 +14,8 @@ class MsList {
   String? officialPicUrl;
   String? wikiPicUrl;
   String? wikiPageUrl;
-  int? favoriteFlag;
-  int? deleteFlag;
+  int? isFavorite;
+  int? isDeleted;
 
   MsList(
       @required this.msName,
@@ -27,7 +27,7 @@ class MsList {
       @required this.officialPicUrl,
       @required this.wikiPicUrl,
       @required this.wikiPageUrl,
-      @required this.favoriteFlag,
-      @required this.deleteFlag
+      @required this.isFavorite,
+      @required this.isDeleted
       );
 }

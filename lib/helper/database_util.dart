@@ -12,6 +12,10 @@ class DatabaseUtil {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       map_id INTEGER NOT NULL,
       map_name TEXT NOT NULL,
+      official_pic_url TEXT,
+      wiki_pic_url TEXT,
+      is_deleted INTEGER NOT NULL,
+      UNIQUE(id),
       UNIQUE(map_id)
       )
       """,
@@ -29,6 +33,9 @@ class DatabaseUtil {
       official_pic_url TEXT,
       wiki_pic_url TEXT,
       wiki_page_url TEXT,
+      is_favorite INTEGER,
+      is_deleted INTEGER NOT NULL,
+      UNIQUE(id),
       UNIQUE(ms_name, ms_level)
       )
       """
@@ -46,6 +53,9 @@ class DatabaseUtil {
       official_pic_url TEXT,
       wiki_pic_url TEXT,
       wiki_page_url TEXT,
+      is_favorite INTEGER,
+      is_deleted INTEGER NOT NULL,
+      UNIQUE(id),
       UNIQUE(ms_name, ms_level)
       )
       """
@@ -63,6 +73,9 @@ class DatabaseUtil {
       official_pic_url TEXT,
       wiki_pic_url TEXT,
       wiki_page_url TEXT,
+      is_favorite INTEGER,
+      is_deleted INTEGER NOT NULL,
+      UNIQUE(id),
       UNIQUE(ms_name, ms_level)
       )
       """

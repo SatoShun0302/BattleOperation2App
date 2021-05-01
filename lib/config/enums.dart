@@ -21,17 +21,35 @@ enum FieldType {
 
 /// SharedPreferencesのkey一覧
 enum SharedPrefKey {
-  DoneFirstProcess, // アプリインストール後初回起動か否か
-  MadeDatabase, // データベースを作成済みかどうか
-  InsertedInitMsRecord, // 機体一覧初期データを挿入済みか否か
-  InsertedInitMapRecord, // マップ一覧初期データを挿入済みか否か
-  Profile, // プロフィール情報
-  LocalNotificationFlag, // ローカル通知フラグ
-  PushNotificationFlag, // プッシュ通知フラグ
-  LoseMsVoteNumber, // 負け機体投票回数
-  WinMsVoteNumber, // 勝ち機体投票回数
-  CanVoteLoseMs, // 負け機体投票可否フラグ
-  CanVoteWinMs, // 勝ち機体投票可否フラグ
+  /// bool アプリインストール後初回起動か否か
+  DoneFirstProcess,
+  /// bool データベースを作成済みかどうか
+  MadeDatabase,
+  /// bool 機体一覧初期データを挿入済みか否か
+  InsertedInitMsRecord,
+  /// bool 強襲機初期データ挿入に成功したか否か
+  SuccessInsertRaidNs,
+  /// bool 汎用機初期データ挿入に成功したか否か
+  SuccessInsertGeneralNs,
+  /// bool 支援機初期データ挿入に成功したか否か
+  SuccessInsertSupportNs,
+  /// bool マップ一覧初期データを挿入済みか否か
+  InsertedInitMapRecord,
+  /// プロフィール情報
+  Profile,
+  /// bool ローカル通知フラグ
+  LocalNotificationFlag,
+  /// bool プッシュ通知フラグ
+  PushNotificationFlag,
+  /// 負け機体投票回数
+  LoseMsVoteNumber,
+  /// 勝ち機体投票回数
+  WinMsVoteNumber,
+  /// 負け機体投票可否フラグ
+  CanVoteLoseMs,
+  /// 勝ち機体投票可否フラグ
+  CanVoteWinMs,
   LastVoteDatetime, //
-  VoteRightGrantDay // 投票権付与最終日
+  /// 投票権付与最終日
+  VoteRightGrantDay
 }

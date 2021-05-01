@@ -15,8 +15,8 @@ Future<void> main() async {
   /**
    * アプリ初回インストール時の処理
    * - データベースの作成
-   * - csvから読み込んだ機体リストのinsert
    * - csvから読み込んだマップリストのinsert
+   * - csvから読み込んだ機体リストのinsert
    * - 投票権を所定数付与 付与日の登録
    */
   SharedPreferences _prefs = await SharedPreferences.getInstance();
@@ -28,21 +28,14 @@ Future<void> main() async {
       MapListRepository mlr = new MapListRepository();
       mlr.init();
     }
-    // 初期機体データ挿入フラグを確認　未挿入であった場合はレコードを挿入する
-    if (_prefs.getBool(SharedPrefKey.InsertedInitMsRecord.toString()) == null ||
-        _prefs.getBool(SharedPrefKey.InsertedInitMsRecord.toString()) ==
-            false) {
-      MsListRepository mslr = new MsListRepository();
-      mslr.initInsertRecords();
-    }
-    // 初期マップデータ挿入フラグを確認　未挿入であった場合はレコードを挿入する
-    if (_prefs.getBool(SharedPrefKey.InsertedInitMapRecord.toString()) ==
-        null ||
-        _prefs.getBool(SharedPrefKey.InsertedInitMapRecord.toString()) ==
-            false) {
-      MapListRepository mlr = new MapListRepository();
-      mlr.initInsertRecords();
-    }
+    // 初期マップデータを挿入する
+    MapListRepository mlr = new MapListRepository();
+    mlr.initInsertRecords();
+    // 初期機体データを挿入する
+    MsListRepository mslr = new MsListRepository();
+    mslr.initInsertRecords();
+    //////デバッグ用のやつ　最終的に消す
+    //mslr.deleteMyDatabase();
     // 投票権を所定数付与
 
     // 処理が成功したか否かに関わらず、初回起動済みフラグはtrueにする
@@ -55,7 +48,9 @@ Future<void> main() async {
   // 投票権を付与数を確認
   CheckVoteRight cvr = new CheckVoteRight();
   int _grantRightNumber = await cvr.isGrantedVoteRight();
-  _prefs.setBool(SharedPrefKey.DoneFirstProcess.toString(), false);
+
+  //////デバッグ用のやつ　最終的に消す
+  //_prefs.setBool(SharedPrefKey.DoneFirstProcess.toString(), false);
 
   runApp(GetMaterialApp(
     home: MainScreen(),

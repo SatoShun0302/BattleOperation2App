@@ -24,6 +24,8 @@ class MapListRepository extends BasicDatabase {
   /// アプリ初回インストール時にレコード挿入を行う.
   /// insert処理に成功した場合はtrueを、失敗した場合はfalseを返す
   Future<bool> initInsertRecords() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    db = await database;
     final String mapCsv = await rootBundle.loadString('assets/csv/map.csv');
     List<MapList> mapLists = [];
 
@@ -31,14 +33,30 @@ class MapListRepository extends BasicDatabase {
     for (String line in mapCsv.split("\r\n")) {
       List rows = line.split(",");
       MapList mapList = new MapList(
-          int.parse(rows[0]),
-          rows[1],
-          rows[2],
-          rows[3],
-          int.parse(rows[4])
-      );
+          int.parse(rows[0]), rows[1], rows[2], rows[3], int.parse(rows[4]));
       mapLists.add(mapList);
     }
+    // DBにレコードを挿入する
+    List<int> insertResultNum = [];
+    await db.transaction((txn) async {
+      try {
+        await Future.forEach(mapLists, (MapList mapList) async {
+          int _id = await txn.rawInsert(
+              'INSERT INTO ${DatabaseEnv.stageTable} VALUES (?, ?, ?, ?, ?, ?)', [
+            mapList.id,
+            mapList.mapId,
+            mapList.mapName,
+            mapList.officialPicUrl,
+            mapList.wikiPicUrl,
+            mapList.isDeleted
+          ]);
+          insertResultNum.add(_id);
+        });
+        _prefs.setBool(SharedPrefKey.SuccessInsertRaidNs.toString(), true);
+      } catch (e) {
+        _prefs.setBool(SharedPrefKey.SuccessInsertRaidNs.toString(), false);
+      }
+    });
     return true;
   }
 }

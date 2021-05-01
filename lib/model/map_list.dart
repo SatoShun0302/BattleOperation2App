@@ -8,13 +8,13 @@ class MapList {
   String? mapName;
   String? officialPicUrl;
   String? wikiPicUrl;
-  int? deleteFlag;
+  int? isDeleted;
 
   MapList(
       @required this.mapId,
       @required this.mapName,
       @required this.officialPicUrl,
       @required this.wikiPicUrl,
-      @required this.deleteFlag
+      @required this.isDeleted
       );
 }

@@ -26,4 +26,10 @@ abstract class BasicDatabase {
   }
 
   createTable(Database db, int version) async {}
+
+  deleteMyDatabase() async {
+    final String directory = await getDatabasesPath();
+    final String path = join(directory, DatabaseEnv.DBName);
+    await deleteDatabase(path);
+  }
 }
