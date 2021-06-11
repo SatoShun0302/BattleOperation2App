@@ -98,6 +98,7 @@ class DrawerMenu {
           title: Text('試合データ登録',
             textScaleFactor: 1,),
           onTap: () {
+            Get.off(() => MyBattleRecordAdd());
             print("2-2");
           },
         )
