@@ -19,7 +19,7 @@ export 'package:battle_operation2_app/helper/enum_util.dart';
 export 'package:battle_operation2_app/helper/database_util.dart';
 // model
 export 'package:battle_operation2_app/model/my_battle_record_single.dart';
-export 'package:battle_operation2_app/model/ms_list.dart';
+export 'package:battle_operation2_app/model/mobile_suit.dart';
 export 'package:battle_operation2_app/model/map_list.dart';
 
 // repository

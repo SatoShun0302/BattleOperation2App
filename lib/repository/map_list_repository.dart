@@ -21,6 +21,23 @@ class MapListRepository extends BasicDatabase {
     DatabaseUtil.createTable(db, 1);
   }
 
+  /// マップのデータを全件取得する.
+  ///
+  /// 論理削除されたデータは含まない.
+  Future<List<MapList>> getRecord() async {
+    db = await database;
+    List<Map<String, dynamic>> map = await db.query(DatabaseEnv.stageTable,
+        where: "is_deleted = ?",
+      whereArgs: [
+       0
+      ]);
+    List<MapList> mapLists = [];
+    map.forEach((element) {
+      mapLists.add(MapList.fromDynamic(element));
+    });
+    return mapLists;
+  }
+
   /// アプリ初回インストール時にレコード挿入を行う.
   /// insert処理に成功した場合はtrueを、失敗した場合はfalseを返す
   Future<bool> initInsertRecords() async {
@@ -33,7 +50,7 @@ class MapListRepository extends BasicDatabase {
     for (String line in mapCsv.split("\r\n")) {
       List rows = line.split(",");
       MapList mapList = new MapList(
-          int.parse(rows[0]), rows[1], rows[2], rows[3], int.parse(rows[4]));
+          null, int.parse(rows[0]), rows[1], rows[2], rows[3], int.parse(rows[4]));
       mapLists.add(mapList);
     }
     // DBにレコードを挿入する
@@ -52,11 +69,13 @@ class MapListRepository extends BasicDatabase {
           ]);
           insertResultNum.add(_id);
         });
-        _prefs.setBool(SharedPrefKey.SuccessInsertRaidNs.toString(), true);
+        _prefs.setBool(SharedPrefKey.InsertedInitMapRecord.toString(), true);
       } catch (e) {
-        _prefs.setBool(SharedPrefKey.SuccessInsertRaidNs.toString(), false);
+        _prefs.setBool(SharedPrefKey.InsertedInitMapRecord.toString(), false);
       }
     });
     return true;
   }
+
+
 }

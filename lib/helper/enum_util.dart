@@ -6,7 +6,7 @@ class EnumUtil {
   /// MSタイプを返す
   ///
   /// @param MobileSuitType @return String
-  static String mobileSuitType(MobileSuitType msType) {
+  static String getMobileSuitType(MobileSuitType msType) {
     switch (msType) {
       case MobileSuitType.General:
         return "汎用";

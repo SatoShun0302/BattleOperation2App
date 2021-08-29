@@ -4,10 +4,9 @@ import 'package:battle_operation2_app/importer/dart_importer.dart';
 
 /// データベースの作成時などに使うメソッドを扱うクラス
 class DatabaseUtil {
-
   static createTable(Database? db, int version) {
-    db!.execute(
-      """
+    // ステージ一覧テーブル
+    db!.execute("""
       CREATE TABLE ${DatabaseEnv.stageTable}(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       map_id INTEGER NOT NULL,
@@ -18,10 +17,9 @@ class DatabaseUtil {
       UNIQUE(id),
       UNIQUE(map_id)
       )
-      """,
-    );
-    db.execute(
-      """
+      """);
+    // 汎用MSテーブル
+    db.execute("""
       CREATE TABLE ${DatabaseEnv.generalMsTable}(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       ms_name TEXT NOT NULL,
@@ -38,10 +36,9 @@ class DatabaseUtil {
       UNIQUE(id),
       UNIQUE(ms_name, ms_level)
       )
-      """
-    );
-    db.execute(
-        """
+      """);
+    // 支援MSテーブル
+    db.execute("""
       CREATE TABLE ${DatabaseEnv.supportMsTable}(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       ms_name TEXT NOT NULL,
@@ -58,10 +55,9 @@ class DatabaseUtil {
       UNIQUE(id),
       UNIQUE(ms_name, ms_level)
       )
-      """
-    );
-    db.execute(
-        """
+      """);
+    // 強襲MSテーブル
+    db.execute("""
       CREATE TABLE ${DatabaseEnv.raidMsTable}(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       ms_name TEXT NOT NULL,
@@ -78,9 +74,27 @@ class DatabaseUtil {
       UNIQUE(id),
       UNIQUE(ms_name, ms_level)
       )
-      """
-    );
-    //db.execute("sql");
+      """);
+    // MSタイプテーブル
+    db.execute("""
+      CREATE TABLE ${DatabaseEnv.msTypeTable}(
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      ms_type_name TEXT NOT NULL,
+      is_deleted INTEGER NOT NULL,
+      UNIQUE(id),
+      UNIQUE(ms_type_name)
+      )
+      """);
+    // コスト一覧テーブル
+    db.execute("""
+      CREATE TABLE ${DatabaseEnv.costTable}(
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      cost INTEGER NOT NULL,
+      is_deleted INTEGER NOT NULL,
+      UNIQUE(id),
+      UNIQUE(cost)
+      )
+      """);
     //db.execute("sql");
   }
 }

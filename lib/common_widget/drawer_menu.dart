@@ -2,6 +2,8 @@ import 'package:battle_operation2_app/importer/myclass_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
 import 'package:battle_operation2_app/importer/dart_importer.dart';
 import 'package:battle_operation2_app/repository/map_list_repository.dart';
+import 'package:battle_operation2_app/repository/ms_list_repository.dart';
+import 'package:battle_operation2_app/repository/ms_type_list_repository.dart';
 
 
 /// ドロワーメニューを共通化
@@ -28,6 +30,15 @@ class DrawerMenu {
           onTap: () {
             MapListRepository mlr = new MapListRepository();
             mlr.init();
+            MsTypeListRepository mstlr = new MsTypeListRepository();
+            mstlr.initInsertRecords();
+            // 初期マップデータを挿入する
+            mlr.initInsertRecords();
+            // 初期機体データを挿入する
+            MsListRepository mslr = new MsListRepository();
+            mslr.initInsertRecords();
+            // コスト一覧データを挿入する
+
           },
         ),
         _profileListTile(),

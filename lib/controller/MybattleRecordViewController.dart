@@ -2,13 +2,7 @@ import 'package:battle_operation2_app/importer/myclass_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
 import 'package:battle_operation2_app/importer/dart_importer.dart';
 
-/// 戦績確認画面用のコントローラー
-/// 地上と宇宙の戦績を確認する際に使用する
-///
-/// 一度検索された条件のデータはモデルクラスのインスタンスに保持し、2回目以降はDBアクセスをしない
-///
-/// 戦績が新たに登録されたマップとコストについてはインスタンスを破棄し、再度検索を行う
-class MyBattleRecordController {
+class MyBattleRecordViewController {
 
   /// 一度検索されたマップとコストのデータを保持したインスタンスを格納する
   ///
@@ -28,6 +22,9 @@ class MyBattleRecordController {
 
   /// コストリスト
   List<int> costList = [];
+
+  /// MSタイプリスト
+  Map<int, String> msTypeList = new Map();
 
   /// 選択されたコスト帯
   RxInt choosedCost = 0.obs;

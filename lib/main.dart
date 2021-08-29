@@ -7,6 +7,9 @@ import 'package:battle_operation2_app/service/init_function/check_vote_right.dar
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'controller/my_battle_record_add_controller.dart';
+import 'repository/ms_type_list_repository.dart';
+
 Future<void> main() async {
   // main関数内で非同期処理を行う際に必須となる記述
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,8 +37,10 @@ Future<void> main() async {
     // 初期機体データを挿入する
     MsListRepository mslr = new MsListRepository();
     mslr.initInsertRecords();
-    //////デバッグ用のやつ　最終的に消す
-    //mslr.deleteMyDatabase();
+    // MSタイプのデータを挿入する
+    MsTypeListRepository mstlr = new MsTypeListRepository();
+    mstlr.initInsertRecords();
+
     // 投票権を所定数付与
 
     // 処理が成功したか否かに関わらず、初回起動済みフラグはtrueにする
@@ -51,6 +56,15 @@ Future<void> main() async {
 
   //////デバッグ用のやつ　最終的に消す
   //_prefs.setBool(SharedPrefKey.DoneFirstProcess.toString(), false);
+  //////デバッグ用のやつ　最終的に消す
+  MsListRepository mslr = new MsListRepository();
+  mslr.deleteMyDatabase();
+
+  /**
+   * コントローラーを定義する
+   */
+  final MyBattleRecordAddController? c = Get.put(MyBattleRecordAddController(), tag: "myBattleRecordAdd");
+
 
   runApp(GetMaterialApp(
     home: MainScreen(),
@@ -58,6 +72,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -79,6 +94,8 @@ class Controller extends GetxController {
 }
 
 class Home extends StatelessWidget {
+
+
   @override
   Widget build(context) {
 // 画面サイズを取得しscreen_envへ格納する

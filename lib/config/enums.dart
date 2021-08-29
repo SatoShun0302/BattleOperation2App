@@ -28,11 +28,11 @@ enum SharedPrefKey {
   /// bool 機体一覧初期データを挿入済みか否か
   InsertedInitMsRecord,
   /// bool 強襲機初期データ挿入に成功したか否か
-  SuccessInsertRaidNs,
+  SuccessInsertRaidMs,
   /// bool 汎用機初期データ挿入に成功したか否か
-  SuccessInsertGeneralNs,
+  SuccessInsertGeneralMs,
   /// bool 支援機初期データ挿入に成功したか否か
-  SuccessInsertSupportNs,
+  SuccessInsertSupportMs,
   /// bool マップ一覧初期データを挿入済みか否か
   InsertedInitMapRecord,
   /// プロフィール情報

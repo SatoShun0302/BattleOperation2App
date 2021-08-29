@@ -48,6 +48,7 @@ dependencies:
   #
   # ページ下部メニューボタン
   convex_bottom_bar: ^3.0.0
+  flutter_typeahead: ^3.1.3
 
 
 
