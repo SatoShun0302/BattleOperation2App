@@ -1,6 +1,7 @@
 import 'package:battle_operation2_app/importer/myclass_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
 import 'package:battle_operation2_app/importer/dart_importer.dart';
+import 'package:battle_operation2_app/model/cost.dart';
 
 class CostListRepository extends BasicDatabase {
   late Database db;
@@ -22,11 +23,41 @@ class CostListRepository extends BasicDatabase {
   }
 
   /// コストのデータを全件取得する.
-  Future<List<Map<String, dynamic>>> getRecord() async {
+  Future<List<Cost>> getRecord() async {
     db = await database;
-    List<Map<String, dynamic>> map = await db.query(DatabaseEnv.costTable,
-        where: "is_deleted = 0"
-    );
-    return map;
+    List<Map<String, dynamic>> map =
+        await db.query(DatabaseEnv.costTable, where: "is_deleted = 0");
+    List<Cost> costList = [];
+    map.forEach((element) {
+      costList.add(Cost.fromDynamic(element));
+    });
+    return costList;
+  }
+
+  /// アプリ初回インストール時にレコード挿入を行う.
+  ///
+  /// insert処理に成功した場合はtrueを、失敗した場合はfalseを返す.
+  Future<bool> initInsertRecords() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    db = await database;
+    final String mapCsv = await rootBundle.loadString('assets/csv/cost.csv');
+    List<String> rows = [];
+    for (String line in mapCsv.split("\r\n")) {
+      rows.add(line);
+    }
+    // DBにレコードを挿入する
+    await db.transaction((txn) async {
+      try {
+        await Future.forEach(rows, (String row) async {
+          int _id = await txn.rawInsert(
+              'INSERT INTO ${DatabaseEnv.costTable} VALUES (?, ?, ?)',
+              [null, int.parse(row), DatabaseEnv.isDeletedFalse]);
+        });
+        _prefs.setBool(SharedPrefKey.SuccessInsertCost.toString(), true);
+      } catch (e) {
+        _prefs.setBool(SharedPrefKey.SuccessInsertCost.toString(), false);
+      }
+    });
+    return true;
   }
 }

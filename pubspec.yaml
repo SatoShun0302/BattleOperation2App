@@ -31,15 +31,13 @@ dependencies:
   font_awesome_flutter: ^9.0.0
 
   # 状態管理ツール
-  get: ^4.0.0-nullsafety.2
+  get: ^4.3.8
   # データベース
   sqflite: ^2.0.0+3
   # ローカルストレージ
   shared_preferences: ^2.0.5
   # webView and url luncher
   webview_flutter: ^2.0.2
-  # html
-  flutter_html: ^2.0.0-nullsafety.0
   # csv
   csv: ^5.0.0
 

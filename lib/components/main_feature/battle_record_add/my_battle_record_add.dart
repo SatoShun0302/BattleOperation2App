@@ -13,7 +13,6 @@ class MyBattleRecordAdd extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text(""),
@@ -71,8 +70,6 @@ class MyBattleRecordAdd extends StatelessWidget {
                         onChanged: (int? value) => {
                           c.choosedMapId.value = value!,
                           print(c.choosedMapId.value),
-                          c.update(),
-                          c.getMsList()
                         },
                       ),
                     ),
@@ -88,21 +85,28 @@ class MyBattleRecordAdd extends StatelessWidget {
             ),
             Container(
               margin: EdgeInsets.only(bottom: ScreenEnv.deviceWidth * 0.05),
-              child: Center(
-                child: DropdownButton(
-                  items: [
-                    DropdownMenuItem(
-                      child: myText.Text(
-                        "",
-                        style: TextStyle(fontSize: 30.0),
+              child: FutureBuilder(
+                  future: c.getCostList(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    }
+                    if (snapshot.hasError || c.costDropdownList == []) {
+                      return myText.Text("コスト一覧を取得できませんでした");
+                    }
+                    return Center(
+                      child: Obx(
+                        () => DropdownButton(
+                          items: c.costDropdownList,
+                          value: c.choosedCost.value,
+                          onChanged: (int? value) => {
+                            c.choosedCost.value = value!,
+                            print(c.choosedCost.value),
+                          },
+                        ),
                       ),
-                      value: 1,
-                    ),
-                  ],
-                  value: null,
-                  onChanged: null,
-                ),
-              ),
+                    );
+                  }),
             ),
             Row(
               children: [
@@ -112,20 +116,28 @@ class MyBattleRecordAdd extends StatelessWidget {
             ),
             Container(
               margin: EdgeInsets.only(bottom: ScreenEnv.deviceWidth * 0.05),
-              child: Center(
-                child: DropdownButton(
-                  items: [
-                    DropdownMenuItem(
-                      child: myText.Text(
-                        "",
-                        style: TextStyle(fontSize: 30.0),
+              child: FutureBuilder(
+                  future: c.getNumberOfPlayerList(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    }
+                    if (snapshot.hasError || c.numberOfPlayerList == []) {
+                      return myText.Text("対戦人数一覧を取得できませんでした");
+                    }
+                  return Center(
+                    child: Obx(
+                          () => DropdownButton(
+                        items: c.numberOfPlayerList,
+                        value: c.choosedNumberOfPlayer.value,
+                        onChanged: (int? value) => {
+                          c.choosedNumberOfPlayer.value = value!,
+                          print(c.choosedNumberOfPlayer.value),
+                        },
                       ),
-                      value: 1,
                     ),
-                  ],
-                  value: null,
-                  onChanged: null,
-                ),
+                  );
+                }
               ),
             ),
             ElevatedButton(

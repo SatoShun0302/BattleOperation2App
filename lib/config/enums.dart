@@ -35,6 +35,8 @@ enum SharedPrefKey {
   SuccessInsertSupportMs,
   /// bool マップ一覧初期データを挿入済みか否か
   InsertedInitMapRecord,
+  /// bool コスト一覧初期データを挿入済みか否か
+  SuccessInsertCost,
   /// プロフィール情報
   Profile,
   /// bool ローカル通知フラグ
@@ -49,7 +51,8 @@ enum SharedPrefKey {
   CanVoteLoseMs,
   /// 勝ち機体投票可否フラグ
   CanVoteWinMs,
-  LastVoteDatetime, //
+  /// 最後に投票を行った日時
+  LastVoteDatetime,
   /// 投票権付与最終日
   VoteRightGrantDay
 }

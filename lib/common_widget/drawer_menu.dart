@@ -1,6 +1,7 @@
 import 'package:battle_operation2_app/importer/myclass_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
 import 'package:battle_operation2_app/importer/dart_importer.dart';
+import 'package:battle_operation2_app/repository/cost_list_repository.dart';
 import 'package:battle_operation2_app/repository/map_list_repository.dart';
 import 'package:battle_operation2_app/repository/ms_list_repository.dart';
 import 'package:battle_operation2_app/repository/ms_type_list_repository.dart';
@@ -38,7 +39,8 @@ class DrawerMenu {
             MsListRepository mslr = new MsListRepository();
             mslr.initInsertRecords();
             // コスト一覧データを挿入する
-
+            CostListRepository clr = new CostListRepository();
+            clr.initInsertRecords();
           },
         ),
         _profileListTile(),
