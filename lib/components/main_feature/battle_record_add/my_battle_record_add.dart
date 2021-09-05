@@ -59,7 +59,7 @@ class MyBattleRecordAdd extends StatelessWidget {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator();
                   }
-                  if (snapshot.hasError || c.mapDropdownList == []) {
+                  if (snapshot.hasError || c.mapDropdownList.isEmpty) {
                     return myText.Text("マップ一覧を取得できませんでした");
                   }
                   return Center(
@@ -91,7 +91,7 @@ class MyBattleRecordAdd extends StatelessWidget {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return CircularProgressIndicator();
                     }
-                    if (snapshot.hasError || c.costDropdownList == []) {
+                    if (snapshot.hasError || c.costDropdownList.isEmpty) {
                       return myText.Text("コスト一覧を取得できませんでした");
                     }
                     return Center(

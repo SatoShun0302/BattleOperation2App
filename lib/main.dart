@@ -63,7 +63,7 @@ Future<void> main() async {
   /**
    * コントローラーを定義する
    */
-  final MyBattleRecordAddController? c = Get.put(MyBattleRecordAddController(), tag: "myBattleRecordAdd");
+  final MyBattleRecordAddController c = Get.put(MyBattleRecordAddController(), tag: "myBattleRecordAdd");
 
 
   runApp(GetMaterialApp(

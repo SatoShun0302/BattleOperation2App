@@ -15,7 +15,7 @@ class MobileSuit {
   int? msLevel;
 
   @required
-  String? msType;
+  int? msType;
 
   @required
   int? canGround;

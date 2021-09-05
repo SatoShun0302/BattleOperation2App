@@ -18,9 +18,8 @@ import 'package:battle_operation2_app/repository/ms_list_repository.dart';
 class MyBattleRecordAddController extends GetxController {
   /// 一度検索されたマップとコストに対応したMS一覧データを格納する.
   ///
-  /// keyは"canGround0-canSpace0-cost000"の形式を取る ex."canGround1-canSpace0-cost700".
-  RxMap<String, MyBattleRecordSingle> battleRecordCache =
-      new Map<String, MyBattleRecordSingle>().obs;
+  /// keyは"canGround(canSpace)-cost000"の形式を取る ex."canGround-cost700".
+  RxMap<String, List<MobileSuit>> battleRecordCache = <String, List<MobileSuit>>{}.obs;
 
   /// マップのドロップダウンリスト
   List<DropdownMenuItem<int>> mapDropdownList = [];
@@ -132,9 +131,25 @@ class MyBattleRecordAddController extends GetxController {
   }
 
   /// 出撃準備画面２で使用する、MS一覧を取得する.
-  Future<void> getMsList() async{
-    MsListRepository mlr = new MsListRepository();
-    msList = await mlr.getRecordFindByMapAndCost(mapId: choosedMapId.value, cost: choosedCost.value);
-    print(msList);
+  ///
+  /// 取得済みMSリストマップにデータが存在する場合はDBからの検索を行わない.
+  /// keyは"canGround(canSpace)-cost000"の形式を取る ex."canGround-cost700".
+  Future<List<MobileSuit>> getMsList() async{
+    // 選択済みのマップidとコストをもとにマップのkey(String)を定義する
+    String _msListMapKey = "";
+    if (BattleRecordEnv.groundMapIdMin <= choosedMapId.value && choosedMapId.value <= BattleRecordEnv.groundMapIdMax) {
+      _msListMapKey = "canGround-cost${choosedCost.value}";
+    } else if (BattleRecordEnv.spaceMapIdMin <= choosedMapId.value && choosedMapId.value <= BattleRecordEnv.spaceMapIdMax) {
+      _msListMapKey = "canSpace-cost${choosedCost.value}";
+    }
+    // 定義したkeyに対応したデータが取得済みMSリストマップに存在するかチェック
+    if  (battleRecordCache.value.containsKey(_msListMapKey)) {
+      return battleRecordCache.value[_msListMapKey]!;
+    } else {
+      MsListRepository mlr = new MsListRepository();
+      msList = await mlr.getRecordFindByMapAndCost(mapId: choosedMapId.value, cost: choosedCost.value);
+      battleRecordCache.value[_msListMapKey] = msList;
+      return battleRecordCache.value[_msListMapKey]!;
+    }
   }
 }

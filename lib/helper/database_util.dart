@@ -18,6 +18,25 @@ class DatabaseUtil {
       UNIQUE(map_id)
       )
       """);
+    // MSテーブル
+    db.execute("""
+      CREATE TABLE ${DatabaseEnv.msListTable}(
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      ms_name TEXT NOT NULL,
+      ms_level INTEGER NOT NULL,
+      ms_type INTEGER NOT NULL,
+      can_ground INTEGER NOT NULL,
+      can_space INTEGER NOT NULL,
+      cost INTEGER NOT NULL,
+      official_pic_url TEXT,
+      wiki_pic_url TEXT,
+      wiki_page_url TEXT,
+      is_favorite INTEGER,
+      is_deleted INTEGER NOT NULL,
+      UNIQUE(id),
+      UNIQUE(ms_name, ms_level)
+      )
+      """);
     // 汎用MSテーブル
     db.execute("""
       CREATE TABLE ${DatabaseEnv.generalMsTable}(

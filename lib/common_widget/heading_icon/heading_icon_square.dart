@@ -44,14 +44,12 @@ class HeadingIconSquare {
           color: Colors.blue,
           height: ScreenEnv.deviceWidth * 0.05,
           width: ScreenEnv.deviceWidth * 0.05,
-          margin: EdgeInsets.only(left: ScreenEnv.deviceWidth * 0.05, right: ScreenEnv.deviceWidth * 0.03),
         ),
         // 前面
         Container(
           color: Colors.lightBlueAccent,
           height: ScreenEnv.deviceWidth * 0.025,
           width: ScreenEnv.deviceWidth * 0.025,
-          margin: EdgeInsets.only(left: ScreenEnv.deviceWidth * 0.05, right: ScreenEnv.deviceWidth * 0.03),
         ),
       ],
     );
