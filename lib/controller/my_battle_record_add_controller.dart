@@ -19,7 +19,7 @@ class MyBattleRecordAddController extends GetxController {
   /// 一度検索されたマップとコストに対応したMS一覧データを格納する.
   ///
   /// keyは"canGround(canSpace)-cost000"の形式を取る ex."canGround-cost700".
-  RxMap<String, List<MobileSuit>> battleRecordCache = <String, List<MobileSuit>>{}.obs;
+  Map<String, List<MobileSuit>> battleRecordCache = new Map<String, List<MobileSuit>>();
 
   /// マップのドロップダウンリスト
   List<DropdownMenuItem<int>> mapDropdownList = [];
@@ -45,6 +45,33 @@ class MyBattleRecordAddController extends GetxController {
   /// MSリスト
   List<MobileSuit> msList = [];
 
+  /// MSドロップダウンリスト
+  List<DropdownMenuItem<Map<int, String>>> msDropdownList = [];
+
+  /// 選択されたMSのid (自機は1,僚機は2~6)
+  RxInt choosedMsId1 = 0.obs;
+  RxInt choosedMsId2 = 0.obs;
+  RxInt choosedMsId3 = 0.obs;
+  RxInt choosedMsId4 = 0.obs;
+  RxInt choosedMsId5 = 0.obs;
+  RxInt choosedMsId6 = 0.obs;
+  RxMap choosedMsMap2 = RxMap();
+  RxMap choosedMsMap3 = RxMap();
+
+
+  /// 選択されたチームサイド
+  RxString choosedSide = BattleRecordEnv.teamSideA.obs;
+
+  /// 勝敗予想
+  RxInt choosedPrediction = 1.obs;
+
+
+  final String hint = "自機を選択してください";
+  final String alliesHint = "僚機を選択してください";
+  final String searchHint = "機体名で検索ができます";
+  final String favoriteHint = "お気に入り機体から選択します";
+  final String copyHint = "選択した機体を下へコピーします";
+
   /// レコード数(総試合数)
   int recordNum = 0;
 
@@ -68,6 +95,7 @@ class MyBattleRecordAddController extends GetxController {
 
   /// 曜日別勝率
   Map<String, int> dayOfTheWeekWinRate = new Map();
+
 
   /// 出撃準備画面１で使用する、マップ一覧を取得する.
   Future<void> getMapList() async {
@@ -98,20 +126,20 @@ class MyBattleRecordAddController extends GetxController {
     if (costDropdownList.isEmpty) {
       costList.asMap().forEach((index, cost) {
         if (index == 0) {
-          choosedCost.value = cost.id!;
+          choosedCost.value = cost.cost!;
         }
         costDropdownList.add(DropdownMenuItem(
           child: myText.Text(
               cost.cost.toString(),
               style: TextStyle(fontSize: 15.0),
             ),
-          value: cost.id,
+          value: cost.cost,
         ));
       });
     }
   }
 
-  /// 出撃準備画面１で使用する、コスト一覧を取得する.
+  /// 出撃準備画面１で使用する対戦人数組み合わせ一覧を取得する.
   Future<void> getNumberOfPlayerList() async{
     if (numberOfPlayerList.isEmpty) {
       BattleRecordEnv.numberOfPlayer.asMap().forEach((index, value) {
@@ -143,13 +171,44 @@ class MyBattleRecordAddController extends GetxController {
       _msListMapKey = "canSpace-cost${choosedCost.value}";
     }
     // 定義したkeyに対応したデータが取得済みMSリストマップに存在するかチェック
-    if  (battleRecordCache.value.containsKey(_msListMapKey)) {
-      return battleRecordCache.value[_msListMapKey]!;
+    if  (battleRecordCache.containsKey(_msListMapKey)) {
+      msDropdownList = [];
+      battleRecordCache[_msListMapKey]!.asMap().forEach((index, ms) {
+        Map<int, String> _map = new Map();
+        _map[ms.id!] = "${ms.msName} Lv.${ms.msLevel}";
+        // if (index == 0) {
+        //   choosedMsMap2.value = _map;
+        //   choosedMsMap3.value = _map;
+        // }
+        msDropdownList.add(DropdownMenuItem(
+          child: myText.Text(
+            "${ms.msName ??= ""} Lv.${ms.msLevel}",
+            style: TextStyle(fontSize: 15.0),
+          ),
+          value: _map,
+        ));
+      });
+      return battleRecordCache[_msListMapKey]!;
     } else {
       MsListRepository mlr = new MsListRepository();
       msList = await mlr.getRecordFindByMapAndCost(mapId: choosedMapId.value, cost: choosedCost.value);
-      battleRecordCache.value[_msListMapKey] = msList;
-      return battleRecordCache.value[_msListMapKey]!;
+      battleRecordCache[_msListMapKey] = msList;
+      msList.asMap().forEach((index, ms) {
+        Map<int, String> _map = new Map();
+        _map[ms.id!] = "${ms.msName} Lv.${ms.msLevel}";
+        // if (index == 0) {
+        //   choosedMsMap2.value = _map;
+        //   choosedMsMap3.value = _map;
+        // }
+        msDropdownList.add(DropdownMenuItem(
+          child: myText.Text(
+            "${ms.msName ??= ""} Lv.${ms.msLevel}",
+            style: TextStyle(fontSize: 15.0),
+          ),
+          value: _map,
+        ));
+      });
+      return battleRecordCache[_msListMapKey]!;
     }
   }
 }

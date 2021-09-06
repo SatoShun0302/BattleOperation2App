@@ -11,4 +11,8 @@ class BattleRecordEnv {
   static const spaceMapIdMax = 2999;
   /// 対戦人数候補リスト
   static const numberOfPlayer = ["1 vs 1", "2 vs 2", "3 vs 3", "4 vs 4", "5 vs 5", "6 vs 6"];
+  /// チーム選択 A
+  static const teamSideA = "A";
+  /// チーム選択 B
+  static const teamSideB = "B";
 }

@@ -45,7 +45,7 @@ class HeadLine extends StatelessWidget {
             if (icon != null) icon,
             Expanded(
               child: Container(
-                margin: EdgeInsets.only(left: ScreenEnv.deviceWidth * 0.02),
+                margin: EdgeInsets.only(top: ScreenEnv.deviceWidth * 0.02, left: ScreenEnv.deviceWidth * 0.02),
                 padding: EdgeInsets.only(bottom: ScreenEnv.deviceWidth * 0.01),
                 decoration: showUnderLine ? BoxDecoration(
                   border: Border( bottom: BorderSide(color: underLineColor, width: ScreenEnv.deviceWidth * 0.003)),
@@ -68,7 +68,7 @@ class HeadLine extends StatelessWidget {
             if (icon != null) icon,
             Expanded(
               child: Container(
-                margin: EdgeInsets.only(left: ScreenEnv.deviceWidth * 0.02),
+                margin: EdgeInsets.only(top: ScreenEnv.deviceWidth * 0.02, left: ScreenEnv.deviceWidth * 0.02),
                 padding: EdgeInsets.only(bottom: ScreenEnv.deviceWidth * 0.01),
                 decoration: showUnderLine ? BoxDecoration(
                   border: Border( bottom: BorderSide(color: underLineColor, width: ScreenEnv.deviceWidth * 0.006)),
@@ -92,7 +92,7 @@ class HeadLine extends StatelessWidget {
               if (icon != null) icon,
               Expanded(
                 child: Container(
-                  margin: EdgeInsets.only(left: ScreenEnv.deviceWidth * 0.02),
+                  margin: EdgeInsets.only(top: ScreenEnv.deviceWidth * 0.02, left: ScreenEnv.deviceWidth * 0.02),
                   padding: EdgeInsets.only(bottom: ScreenEnv.deviceWidth * 0.01),
                   decoration: showUnderLine ? BoxDecoration(
                     border: Border( bottom: BorderSide(color: underLineColor, width: ScreenEnv.deviceWidth * 0.01)),
@@ -117,7 +117,7 @@ class HeadLine extends StatelessWidget {
             if (icon != null) icon,
             Expanded(
               child: Container(
-                margin: EdgeInsets.only(left: ScreenEnv.deviceWidth * 0.02),
+                margin: EdgeInsets.only(top: ScreenEnv.deviceWidth * 0.02, left: ScreenEnv.deviceWidth * 0.02),
                 decoration: showUnderLine ? BoxDecoration(
                   border: Border( bottom: BorderSide(color: underLineColor, width: ScreenEnv.deviceWidth * 0.005)),
                 ) : null,
