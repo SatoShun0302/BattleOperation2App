@@ -1,4 +1,5 @@
 import 'package:battle_operation2_app/config/battle_record_env.dart';
+import 'package:battle_operation2_app/config/error_message.dart';
 import 'package:battle_operation2_app/importer/myclass_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
 import 'package:battle_operation2_app/importer/dart_importer.dart';
@@ -48,6 +49,9 @@ class MyBattleRecordAddController extends GetxController {
   /// MSドロップダウンリスト
   List<DropdownMenuItem<Map<int, String>>> msDropdownList = [];
 
+  /**
+   * record_add2画面で使用する
+   */
   /// 選択されたMSのid (自機は1,僚機は2~6)
   RxInt choosedMsId1 = 0.obs;
   RxInt choosedMsId2 = 0.obs;
@@ -57,14 +61,62 @@ class MyBattleRecordAddController extends GetxController {
   RxInt choosedMsId6 = 0.obs;
   RxMap choosedMsMap2 = RxMap();
   RxMap choosedMsMap3 = RxMap();
+  RxMap choosedMsMap4 = RxMap();
+  RxMap choosedMsMap5 = RxMap();
+  RxMap choosedMsMap6 = RxMap();
 
 
   /// 選択されたチームサイド
   RxString choosedSide = BattleRecordEnv.teamSideA.obs;
 
   /// 勝敗予想
-  RxInt choosedPrediction = 1.obs;
+  RxInt choosedPrediction = BattleRecordEnv.win.obs;
 
+  /**
+   * record_add3画面で使用する
+   */
+  /// DBに登録されている最新のレート textFieldで使用するためString型にする
+  RxString currentRateNum = "1000".obs;
+
+  /// 検索時点の最新レートを保持しておく ユーザーの操作によって変更しない
+  String _tempCurrentRateNum = "";
+
+  /// 勝敗結果　チーム
+  RxInt winOrLoseResultTeam = BattleRecordEnv.win.obs;
+
+  /// 勝敗結果　ライバル
+  RxInt winOrLoseResultRival = BattleRecordEnv.win.obs;
+
+  /// 総合個人順位 2桁整数 textFieldで使用するためString型にする
+  RxString overallRanking = "".obs;
+
+  /// 個人スコア 5桁整数 textFieldで使用するためString型にする
+  RxString personalScoreRanking = "".obs;
+  RxString personalScore = "".obs;
+
+  /// アシストスコア 5桁整数 textFieldで使用するためString型にする
+  RxString assistScoreRanking = "".obs;
+  RxString assistScore = "".obs;
+
+  /// 与ダメージ 6桁整数 textFieldで使用するためString型にする
+  RxString dealDamageRanking = "".obs;
+  RxString dealDamage = "".obs;
+
+  /// 陽動 小数点第二位までの少数 textFieldで使用するためString型にする
+  RxString feintRanking = "".obs;
+  RxString feint = "".obs;
+
+  /// MS撃破 2桁整数 textFieldで使用するためString型にする
+  RxString msDefeatRanking = "".obs;
+  RxString msDefeat = "".obs;
+
+  /// MS損失 2桁整数 textFieldで使用するためString型にする
+  RxString msLossRanking = "".obs;
+  RxString msLoss = "".obs;
+
+  /// 追撃アシスト 6桁整数 textFieldで使用するためString型にする
+  RxString pursuitAssistRanking = "".obs;
+  RxString pursuitAssist = "".obs;
 
   final String hint = "自機を選択してください";
   final String alliesHint = "僚機を選択してください";
@@ -176,10 +228,6 @@ class MyBattleRecordAddController extends GetxController {
       battleRecordCache[_msListMapKey]!.asMap().forEach((index, ms) {
         Map<int, String> _map = new Map();
         _map[ms.id!] = "${ms.msName} Lv.${ms.msLevel}";
-        // if (index == 0) {
-        //   choosedMsMap2.value = _map;
-        //   choosedMsMap3.value = _map;
-        // }
         msDropdownList.add(DropdownMenuItem(
           child: myText.Text(
             "${ms.msName ??= ""} Lv.${ms.msLevel}",
@@ -196,10 +244,6 @@ class MyBattleRecordAddController extends GetxController {
       msList.asMap().forEach((index, ms) {
         Map<int, String> _map = new Map();
         _map[ms.id!] = "${ms.msName} Lv.${ms.msLevel}";
-        // if (index == 0) {
-        //   choosedMsMap2.value = _map;
-        //   choosedMsMap3.value = _map;
-        // }
         msDropdownList.add(DropdownMenuItem(
           child: myText.Text(
             "${ms.msName ??= ""} Lv.${ms.msLevel}",
@@ -210,5 +254,104 @@ class MyBattleRecordAddController extends GetxController {
       });
       return battleRecordCache[_msListMapKey]!;
     }
+  }
+  /// record_add1の次へボタン押下時にバリデーションを行う.
+  ///
+  /// マップ,コスト,対戦人数未入力でないかを確認.
+  /// @return List<String> errorMessage: エラーメッセージリスト
+  List<String> recordAdd1Validate() {
+    List<String> errorMessage = [];
+    if (choosedMapId.value == 0) {
+      errorMessage.add(ErrorMessage.mapIdUnselected);
+    }
+    if (choosedCost.value == 0) {
+      errorMessage.add(ErrorMessage.costUnselected);
+    }
+    if (choosedNumberOfPlayer.value == 0) {
+      errorMessage.add(ErrorMessage.numberOfPlayerUnselected);
+    }
+    return errorMessage;
+  }
+
+  /// record_add3のデータ登録ボタン押下時にバリデーションを行う.
+  ///
+  /// レート及び各種戦績が未入力でないかを確認.
+  /// @return List<String> errorMessage: エラーメッセージリスト
+  List<String> recordAdd3Validate() {
+    List<String> errorMessage = [];
+    int _rateDiff = 0;
+    if (currentRateNum.isNotEmpty && int.tryParse(_tempCurrentRateNum) != null) {
+      /**
+       * レートが未入力でない、かつレートの初期値取得に成功していた場合のみ増減値を計算.
+       * currentRateNumはウィジェット側でバリデート済み.
+       * _tempCurrentRateNumは最新レートをDBから取得する際に数値であることを確認済み.
+       */
+      _rateDiff = int.tryParse(currentRateNum.value)! - int.tryParse(_tempCurrentRateNum)!;
+    } else if (currentRateNum.value.isEmpty) {
+      errorMessage.add(ErrorMessage.rateNotEntered);
+    }
+    // 総合個人順位
+    if (overallRanking.value.isEmpty) {
+      errorMessage.add(ErrorMessage.overallRankingNotEntered);
+    }
+    // 個人スコア
+    if (personalScoreRanking.value.isEmpty) {
+      errorMessage.add(ErrorMessage.personalScoreRankingNotEntered);
+    }
+    if (personalScore.value.isEmpty) {
+      errorMessage.add(ErrorMessage.personalScoreNotEntered);
+    }
+    // アシストスコア
+    if (assistScoreRanking.value.isEmpty) {
+      errorMessage.add(ErrorMessage.assistScoreRankingNotEntered);
+    }
+    if (assistScore.value.isEmpty) {
+      errorMessage.add(ErrorMessage.assistScoreNotEntered);
+    }
+    // 与ダメージ
+    if (dealDamageRanking.value.isEmpty) {
+      errorMessage.add(ErrorMessage.dealDamageRankingNotEntered);
+    }
+    if (dealDamage.value.isEmpty) {
+      errorMessage.add(ErrorMessage.dealDamageNotEntered);
+    }
+    // 陽動
+    if (feintRanking.value.isEmpty) {
+      errorMessage.add(ErrorMessage.feintRankingNotEntered);
+    }
+    if (feint.value.isEmpty) {
+      errorMessage.add(ErrorMessage.feintNotEntered);
+    }
+    // MS撃破
+    if (msDefeatRanking.value.isEmpty) {
+      errorMessage.add(ErrorMessage.msDefeatRankingNotEntered);
+    }
+    if (msDefeat.value.isEmpty) {
+      errorMessage.add(ErrorMessage.msDefeatNotEntered);
+    }
+    // MS損失
+    if (msLossRanking.value.isEmpty) {
+      errorMessage.add(ErrorMessage.msLossRankingNotEntered);
+    }
+    if (msLoss.value.isEmpty) {
+      errorMessage.add(ErrorMessage.msLossNotEntered);
+    }
+    // 追撃アシスト
+    if (pursuitAssistRanking.value.isEmpty) {
+      errorMessage.add(ErrorMessage.pursuitAssistRankingNotEntered);
+    }
+    if (pursuitAssist.value.isEmpty) {
+      errorMessage.add(ErrorMessage.pursuitAssistNotEntered);
+    }
+    return errorMessage;
+  }
+
+  /// record_add3の戦績登録ボタン押下時に使用する.
+  ///
+  /// 戦績モデルクラスにコントローラーの変数を代入し、戦績記録テーブルへinsertする.
+  /// @return isSuccess: insert処理に成功したか否かのフラグ,デフォルトはfalse.
+  bool submit() {
+    bool _isSuccess = false;
+    return _isSuccess;
   }
 }

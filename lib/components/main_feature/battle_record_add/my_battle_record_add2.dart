@@ -1,6 +1,7 @@
 import 'package:battle_operation2_app/common_widget/custom/custom_container.dart';
 import 'package:battle_operation2_app/common_widget/heading_icon/heading_icon_square.dart';
 import 'package:battle_operation2_app/common_widget/headline.dart';
+import 'package:battle_operation2_app/components/main_feature/battle_record_add/my_battle_record_add3.dart';
 import 'package:battle_operation2_app/config/battle_record_env.dart';
 import 'package:battle_operation2_app/controller/my_battle_record_add_controller.dart';
 import 'package:battle_operation2_app/helper/numeric_conversion_util.dart';
@@ -25,6 +26,9 @@ class MyBattleRecordAdd2 extends StatelessWidget {
     c.choosedMsId6.value = 0;
     c.choosedMsMap2.value = {};
     c.choosedMsMap3.value = {};
+    c.choosedMsMap4.value = {};
+    c.choosedMsMap5.value = {};
+    c.choosedMsMap6.value = {};
 
     return Scaffold(
       appBar: AppBar(
@@ -154,6 +158,7 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                                   onChanged: (Map<int, String>? value) {
                                     c.choosedMsId3.value =
                                         value != null ? value.keys.first : 0;
+                                    c.choosedMsMap3.value =value!;
                                   },
                                   isExpanded: true,
                                 ),),
@@ -166,7 +171,8 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                                 padding: EdgeInsets.all(0),
                                 tooltip: c.copyHint,
                                 onPressed: () {
-                                  if (c.choosedMsId4.value == 0) {c.choosedMsId4.value = c.choosedMsId3.value;}
+                                  c.choosedMsMap4.value = c.choosedMsMap3.value;
+                                  c.choosedMsId4.value = c.choosedMsId3.value;
                                 },
                               ),
                             ),
@@ -188,9 +194,9 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                               child: Container(
                                 margin: EdgeInsets.only(
                                     bottom: ScreenEnv.deviceWidth * 0.01),
-                                child: SearchChoices.single(
+                                child: Obx(() => SearchChoices.single(
                                   items: c.msDropdownList,
-                                  value: c.choosedMsId4,
+                                  value: c.choosedMsMap4.value,
                                   hint: myText.Text(
                                     "${c.alliesHint}",
                                     style: TextStyle(fontSize: 17.0),
@@ -199,9 +205,10 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                                   onChanged: (Map<int, String>? value) {
                                     c.choosedMsId4.value =
                                         value != null ? value.keys.first : 0;
+                                    c.choosedMsMap4.value =value!;
                                   },
                                   isExpanded: true,
-                                ),
+                                ),),
                               ),
                             ),
                             Expanded(
@@ -211,7 +218,8 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                                 padding: EdgeInsets.all(0),
                                 tooltip: c.copyHint,
                                 onPressed: () {
-                                  if (c.choosedMsId5.value == 0) {c.choosedMsId5.value = c.choosedMsId4.value;}
+                                  c.choosedMsMap5.value = c.choosedMsMap4.value;
+                                  c.choosedMsId5.value = c.choosedMsId4.value;
                                 },
                               ),
                             ),
@@ -233,9 +241,9 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                               child: Container(
                                 margin: EdgeInsets.only(
                                     bottom: ScreenEnv.deviceWidth * 0.01),
-                                child: SearchChoices.single(
+                                child: Obx(() => SearchChoices.single(
                                   items: c.msDropdownList,
-                                  value: c.choosedMsId5,
+                                  value: c.choosedMsMap5.value,
                                   hint: myText.Text(
                                     "${c.alliesHint}",
                                     style: TextStyle(fontSize: 17.0),
@@ -244,9 +252,10 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                                   onChanged: (Map<int, String>? value) {
                                     c.choosedMsId5.value =
                                         value != null ? value.keys.first : 0;
+                                    c.choosedMsMap5.value =value!;
                                   },
                                   isExpanded: true,
-                                ),
+                                ),),
                               ),
                             ),
                             Expanded(
@@ -256,7 +265,8 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                                 padding: EdgeInsets.all(0),
                                 tooltip: c.copyHint,
                                 onPressed: () {
-                                  if (c.choosedMsId6.value == 0) {c.choosedMsId6.value = c.choosedMsId5.value;}
+                                  c.choosedMsMap6.value = c.choosedMsMap5.value;
+                                  c.choosedMsId6.value = c.choosedMsId5.value;
                                 },
                               ),
                             ),
@@ -276,9 +286,9 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                             Expanded(
                               flex: 8,
                               child: Container(
-                                child: SearchChoices.single(
+                                child: Obx(() => SearchChoices.single(
                                   items: c.msDropdownList,
-                                  value: c.choosedMsId6,
+                                  value: c.choosedMsMap6.value,
                                   hint: myText.Text(
                                     "${c.alliesHint}",
                                     style: TextStyle(fontSize: 17.0),
@@ -287,9 +297,10 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                                   onChanged: (Map<int, String>? value) {
                                     c.choosedMsId6.value =
                                         value != null ? value.keys.first : 0;
+                                    c.choosedMsMap6.value =value!;
                                   },
                                   isExpanded: true,
-                                ),
+                                ),),
                               ),
                             ),
                             Expanded(
@@ -400,6 +411,7 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () {
                     print("test");
+                    Get.off(() => MyBattleRecordAdd3());
                   },
                   child: myText.Text("出撃"),
                 ),
