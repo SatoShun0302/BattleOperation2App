@@ -1,15 +1,19 @@
 import 'package:battle_operation2_app/common_widget/custom/custom_container.dart';
 import 'package:battle_operation2_app/common_widget/heading_icon/heading_icon_square.dart';
 import 'package:battle_operation2_app/common_widget/headline.dart';
+import 'package:battle_operation2_app/common_widget/submit_button.dart';
 import 'package:battle_operation2_app/components/main_feature/battle_record_add/my_battle_record_add3.dart';
 import 'package:battle_operation2_app/config/battle_record_env.dart';
+import 'package:battle_operation2_app/config/color_env.dart';
 import 'package:battle_operation2_app/controller/my_battle_record_add_controller.dart';
+import 'package:battle_operation2_app/helper/list_util.dart';
 import 'package:battle_operation2_app/helper/numeric_conversion_util.dart';
 import 'package:battle_operation2_app/importer/myclass_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
 import 'package:battle_operation2_app/importer/dart_importer.dart';
 import 'package:battle_operation2_app/common_widget/custom/my_text.dart'
     as myText;
+import 'package:flutter/cupertino.dart';
 import 'package:search_choices/search_choices.dart';
 
 class MyBattleRecordAdd2 extends StatelessWidget {
@@ -17,23 +21,11 @@ class MyBattleRecordAdd2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 選択済みMsIdを初期化する
-    c.choosedMsId1.value = 0;
-    c.choosedMsId2.value = 0;
-    c.choosedMsId3.value = 0;
-    c.choosedMsId4.value = 0;
-    c.choosedMsId5.value = 0;
-    c.choosedMsId6.value = 0;
-    c.choosedMsMap2.value = {};
-    c.choosedMsMap3.value = {};
-    c.choosedMsMap4.value = {};
-    c.choosedMsMap5.value = {};
-    c.choosedMsMap6.value = {};
-
     return Scaffold(
+      backgroundColor: ColorEnv.scaffoldBackground,
       appBar: AppBar(
         title: Text("出撃前情報入力(2/2)"),
-        backgroundColor: Colors.orange,
+        backgroundColor: ColorEnv.appBarBackground,
       ),
       drawer: SafeArea(
         child: Drawer(
@@ -47,7 +39,11 @@ class MyBattleRecordAdd2 extends StatelessWidget {
           child: CustomContainer(
             widget: Column(
               children: <Widget>[
-                HeadLine(size: HeadLineSize.Medium, text: "自機データ"),
+                HeadLine(
+                    size: HeadLineSize.Medium,
+                    text: "自機データ",
+                    textColor: Colors.white,
+                    fontWeight: FontWeight.bold),
                 Card(
                   elevation: 5,
                   child: Padding(
@@ -59,7 +55,7 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                           child: Container(
                             child: SearchChoices.single(
                               items: c.msDropdownList,
-                              value: c.choosedMsId1,
+                              value: c.choosedMsMap1.value,
                               hint: myText.Text(
                                 "${c.hint}",
                                 style: TextStyle(fontSize: 17.0),
@@ -68,6 +64,7 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                               onChanged: (Map<int, String>? value) {
                                 c.choosedMsId1.value =
                                     value != null ? value.keys.first : 0;
+                                c.choosedMsMap1.value = value!;
                               },
                               isExpanded: true,
                             ),
@@ -75,7 +72,10 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                         ),
                         Expanded(
                           child: IconButton(
-                            icon: const Icon(Icons.star,color: Colors.yellow,),
+                            icon: const Icon(
+                              Icons.star,
+                              color: Colors.yellow,
+                            ),
                             splashRadius: ScreenEnv.deviceWidth * 0.05,
                             padding: EdgeInsets.all(0),
                             tooltip: c.favoriteHint,
@@ -86,7 +86,11 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                     ),
                   ),
                 ),
-                HeadLine(size: HeadLineSize.Medium, text: "僚機データ (順不同)"),
+                HeadLine(
+                    size: HeadLineSize.Medium,
+                    text: "僚機データ (順不同)",
+                    textColor: Colors.white,
+                    fontWeight: FontWeight.bold),
                 Card(
                   elevation: 5,
                   child: Padding(
@@ -111,7 +115,7 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                                   onChanged: (Map<int, String>? value) {
                                     c.choosedMsId2.value =
                                         value != null ? value.keys.first : 0;
-                                    c.choosedMsMap2.value =value!;
+                                    c.choosedMsMap2.value = value!;
                                   },
                                   isExpanded: true,
                                 ),
@@ -119,7 +123,8 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                             ),
                             Expanded(
                               child: IconButton(
-                                icon: const Icon(Icons.move_to_inbox_sharp, color: Colors.blueAccent),
+                                icon: const Icon(Icons.move_to_inbox_sharp,
+                                    color: Colors.blueAccent),
                                 splashRadius: ScreenEnv.deviceWidth * 0.05,
                                 padding: EdgeInsets.all(0),
                                 tooltip: c.copyHint,
@@ -131,7 +136,8 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                             ),
                             Expanded(
                               child: IconButton(
-                                icon: const Icon(Icons.star, color: Colors.yellow),
+                                icon: const Icon(Icons.star,
+                                    color: Colors.yellow),
                                 splashRadius: ScreenEnv.deviceWidth * 0.05,
                                 padding: EdgeInsets.all(0),
                                 tooltip: c.favoriteHint,
@@ -147,26 +153,29 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                               child: Container(
                                 margin: EdgeInsets.only(
                                     bottom: ScreenEnv.deviceWidth * 0.01),
-                                child: Obx(() => SearchChoices.single(
-                                  items: c.msDropdownList,
-                                  value: c.choosedMsMap3.value,
-                                  hint: myText.Text(
-                                    "${c.alliesHint}",
-                                    style: TextStyle(fontSize: 17.0),
+                                child: Obx(
+                                  () => SearchChoices.single(
+                                    items: c.msDropdownList,
+                                    value: c.choosedMsMap3.value,
+                                    hint: myText.Text(
+                                      "${c.alliesHint}",
+                                      style: TextStyle(fontSize: 17.0),
+                                    ),
+                                    searchHint: c.searchHint,
+                                    onChanged: (Map<int, String>? value) {
+                                      c.choosedMsId3.value =
+                                          value != null ? value.keys.first : 0;
+                                      c.choosedMsMap3.value = value!;
+                                    },
+                                    isExpanded: true,
                                   ),
-                                  searchHint: c.searchHint,
-                                  onChanged: (Map<int, String>? value) {
-                                    c.choosedMsId3.value =
-                                        value != null ? value.keys.first : 0;
-                                    c.choosedMsMap3.value =value!;
-                                  },
-                                  isExpanded: true,
-                                ),),
+                                ),
                               ),
                             ),
                             Expanded(
                               child: IconButton(
-                                icon: const Icon(Icons.move_to_inbox_sharp, color: Colors.blueAccent),
+                                icon: const Icon(Icons.move_to_inbox_sharp,
+                                    color: Colors.blueAccent),
                                 splashRadius: ScreenEnv.deviceWidth * 0.05,
                                 padding: EdgeInsets.all(0),
                                 tooltip: c.copyHint,
@@ -178,7 +187,8 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                             ),
                             Expanded(
                               child: IconButton(
-                                icon: const Icon(Icons.star, color: Colors.yellow),
+                                icon: const Icon(Icons.star,
+                                    color: Colors.yellow),
                                 splashRadius: ScreenEnv.deviceWidth * 0.05,
                                 padding: EdgeInsets.all(0),
                                 tooltip: c.favoriteHint,
@@ -194,26 +204,29 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                               child: Container(
                                 margin: EdgeInsets.only(
                                     bottom: ScreenEnv.deviceWidth * 0.01),
-                                child: Obx(() => SearchChoices.single(
-                                  items: c.msDropdownList,
-                                  value: c.choosedMsMap4.value,
-                                  hint: myText.Text(
-                                    "${c.alliesHint}",
-                                    style: TextStyle(fontSize: 17.0),
+                                child: Obx(
+                                  () => SearchChoices.single(
+                                    items: c.msDropdownList,
+                                    value: c.choosedMsMap4.value,
+                                    hint: myText.Text(
+                                      "${c.alliesHint}",
+                                      style: TextStyle(fontSize: 17.0),
+                                    ),
+                                    searchHint: c.searchHint,
+                                    onChanged: (Map<int, String>? value) {
+                                      c.choosedMsId4.value =
+                                          value != null ? value.keys.first : 0;
+                                      c.choosedMsMap4.value = value!;
+                                    },
+                                    isExpanded: true,
                                   ),
-                                  searchHint: c.searchHint,
-                                  onChanged: (Map<int, String>? value) {
-                                    c.choosedMsId4.value =
-                                        value != null ? value.keys.first : 0;
-                                    c.choosedMsMap4.value =value!;
-                                  },
-                                  isExpanded: true,
-                                ),),
+                                ),
                               ),
                             ),
                             Expanded(
                               child: IconButton(
-                                icon: const Icon(Icons.move_to_inbox_sharp, color: Colors.blueAccent),
+                                icon: const Icon(Icons.move_to_inbox_sharp,
+                                    color: Colors.blueAccent),
                                 splashRadius: ScreenEnv.deviceWidth * 0.05,
                                 padding: EdgeInsets.all(0),
                                 tooltip: c.copyHint,
@@ -225,7 +238,8 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                             ),
                             Expanded(
                               child: IconButton(
-                                icon: const Icon(Icons.star, color: Colors.yellow),
+                                icon: const Icon(Icons.star,
+                                    color: Colors.yellow),
                                 splashRadius: ScreenEnv.deviceWidth * 0.05,
                                 padding: EdgeInsets.all(0),
                                 tooltip: c.favoriteHint,
@@ -241,26 +255,29 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                               child: Container(
                                 margin: EdgeInsets.only(
                                     bottom: ScreenEnv.deviceWidth * 0.01),
-                                child: Obx(() => SearchChoices.single(
-                                  items: c.msDropdownList,
-                                  value: c.choosedMsMap5.value,
-                                  hint: myText.Text(
-                                    "${c.alliesHint}",
-                                    style: TextStyle(fontSize: 17.0),
+                                child: Obx(
+                                  () => SearchChoices.single(
+                                    items: c.msDropdownList,
+                                    value: c.choosedMsMap5.value,
+                                    hint: myText.Text(
+                                      "${c.alliesHint}",
+                                      style: TextStyle(fontSize: 17.0),
+                                    ),
+                                    searchHint: c.searchHint,
+                                    onChanged: (Map<int, String>? value) {
+                                      c.choosedMsId5.value =
+                                          value != null ? value.keys.first : 0;
+                                      c.choosedMsMap5.value = value!;
+                                    },
+                                    isExpanded: true,
                                   ),
-                                  searchHint: c.searchHint,
-                                  onChanged: (Map<int, String>? value) {
-                                    c.choosedMsId5.value =
-                                        value != null ? value.keys.first : 0;
-                                    c.choosedMsMap5.value =value!;
-                                  },
-                                  isExpanded: true,
-                                ),),
+                                ),
                               ),
                             ),
                             Expanded(
                               child: IconButton(
-                                icon: const Icon(Icons.move_to_inbox_sharp, color: Colors.blueAccent),
+                                icon: const Icon(Icons.move_to_inbox_sharp,
+                                    color: Colors.blueAccent),
                                 splashRadius: ScreenEnv.deviceWidth * 0.05,
                                 padding: EdgeInsets.all(0),
                                 tooltip: c.copyHint,
@@ -272,7 +289,8 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                             ),
                             Expanded(
                               child: IconButton(
-                                icon: const Icon(Icons.star, color: Colors.yellow),
+                                icon: const Icon(Icons.star,
+                                    color: Colors.yellow),
                                 splashRadius: ScreenEnv.deviceWidth * 0.05,
                                 padding: EdgeInsets.all(0),
                                 tooltip: c.favoriteHint,
@@ -286,26 +304,29 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                             Expanded(
                               flex: 8,
                               child: Container(
-                                child: Obx(() => SearchChoices.single(
-                                  items: c.msDropdownList,
-                                  value: c.choosedMsMap6.value,
-                                  hint: myText.Text(
-                                    "${c.alliesHint}",
-                                    style: TextStyle(fontSize: 17.0),
+                                child: Obx(
+                                  () => SearchChoices.single(
+                                    items: c.msDropdownList,
+                                    value: c.choosedMsMap6.value,
+                                    hint: myText.Text(
+                                      "${c.alliesHint}",
+                                      style: TextStyle(fontSize: 17.0),
+                                    ),
+                                    searchHint: c.searchHint,
+                                    onChanged: (Map<int, String>? value) {
+                                      c.choosedMsId6.value =
+                                          value != null ? value.keys.first : 0;
+                                      c.choosedMsMap6.value = value!;
+                                    },
+                                    isExpanded: true,
                                   ),
-                                  searchHint: c.searchHint,
-                                  onChanged: (Map<int, String>? value) {
-                                    c.choosedMsId6.value =
-                                        value != null ? value.keys.first : 0;
-                                    c.choosedMsMap6.value =value!;
-                                  },
-                                  isExpanded: true,
-                                ),),
+                                ),
                               ),
                             ),
                             Expanded(
                               child: IconButton(
-                                icon: const Icon(Icons.move_to_inbox_sharp, color: Colors.blueAccent),
+                                icon: const Icon(Icons.move_to_inbox_sharp,
+                                    color: Colors.blueAccent),
                                 splashRadius: ScreenEnv.deviceWidth * 0.05,
                                 padding: EdgeInsets.all(0),
                                 tooltip: c.copyHint,
@@ -314,7 +335,8 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                             ),
                             Expanded(
                               child: IconButton(
-                                icon: const Icon(Icons.star, color: Colors.yellow),
+                                icon: const Icon(Icons.star,
+                                    color: Colors.yellow),
                                 splashRadius: ScreenEnv.deviceWidth * 0.05,
                                 padding: EdgeInsets.all(0),
                                 tooltip: c.favoriteHint,
@@ -327,7 +349,11 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                     ),
                   ),
                 ),
-                HeadLine(size: HeadLineSize.Medium, text: "その他情報"),
+                HeadLine(
+                    size: HeadLineSize.Medium,
+                    text: "その他情報",
+                    textColor: Colors.white,
+                    fontWeight: FontWeight.bold),
                 Card(
                   elevation: 5,
                   child: Padding(
@@ -408,12 +434,41 @@ class MyBattleRecordAdd2 extends StatelessWidget {
                     ),
                   ),
                 ),
-                ElevatedButton(
+                SubmitButton(
+                  child: myText.Text(
+                    "出撃",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
+                  ),
                   onPressed: () {
-                    print("test");
-                    Get.off(() => MyBattleRecordAdd3());
+                    List<String> validateResult = c.recordAdd2Validate();
+                    if (validateResult.isNotEmpty) {
+                      Get.snackbar(
+                        "",
+                        "",
+                        titleText: myText.Text(
+                          "エラー",
+                          style: TextStyle(
+                              color: Colors.amber,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
+                        ),
+                        messageText: myText.Text(
+                        ListUtil.createSnackBarMessage(validateResult),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16),
+                        ),
+                        isDismissible: true,
+                        duration: Duration(seconds: 3),
+                        backgroundColor: ColorEnv.snackBarBackground,
+                      );
+                    } else {
+                      Get.off(() => MyBattleRecordAdd3());
+                    }
                   },
-                  child: myText.Text("出撃"),
                 ),
               ],
             ),

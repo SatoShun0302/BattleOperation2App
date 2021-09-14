@@ -10,7 +10,7 @@ class BattleRecordEnv {
   /// 宇宙マップの最大id 2999
   static const int spaceMapIdMax = 2999;
   /// 対戦人数候補リスト
-  static const numberOfPlayer = ["1 vs 1", "2 vs 2", "3 vs 3", "4 vs 4", "5 vs 5", "6 vs 6"];
+  static const numberOfPlayer = ["5 vs 5", "6 vs 6"];
   /// チーム選択 A
   static const String teamSideA = "A";
   /// チーム選択 B

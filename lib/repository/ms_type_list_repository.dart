@@ -2,7 +2,7 @@ import 'package:battle_operation2_app/importer/myclass_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
 import 'package:battle_operation2_app/importer/dart_importer.dart';
 
-class MsTypeListRepository  extends BasicDatabase {
+class MsTypeListRepository extends BasicDatabase {
   late Database db;
 
   void init() async {

@@ -1,7 +1,10 @@
+import 'package:battle_operation2_app/common_widget/cancel_button.dart';
 import 'package:battle_operation2_app/common_widget/custom/battle_record_add_card.dart';
 import 'package:battle_operation2_app/common_widget/custom/custom_container.dart';
 import 'package:battle_operation2_app/common_widget/heading_icon/heading_icon_square.dart';
 import 'package:battle_operation2_app/common_widget/headline.dart';
+import 'package:battle_operation2_app/common_widget/submit_button.dart';
+import 'package:battle_operation2_app/config/color_env.dart';
 import 'package:battle_operation2_app/controller/my_battle_record_add_controller.dart';
 import 'package:battle_operation2_app/importer/myclass_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
@@ -14,13 +17,14 @@ import 'my_battle_record_add2.dart';
 
 class MyBattleRecordAdd extends StatelessWidget {
   final MyBattleRecordAddController c = Get.find(tag: "myBattleRecordAdd");
-
   @override
   Widget build(BuildContext context) {
+    c.init();
     return Scaffold(
+      backgroundColor: ColorEnv.scaffoldBackground,
       appBar: AppBar(
         title: Text("出撃前情報入力(1/2)"),
-        backgroundColor: Colors.orange,
+        backgroundColor: ColorEnv.appBarBackground,
       ),
       drawer: SafeArea(
         child: Drawer(
@@ -34,7 +38,10 @@ class MyBattleRecordAdd extends StatelessWidget {
           child: CustomContainer(
             widget: Column(
               children: <Widget>[
-                HeadLine(size: HeadLineSize.Medium, text: "マップ"),
+                HeadLine(
+                    size: HeadLineSize.Medium,
+                    text: "マップ",
+                    textColor: Colors.white),
                 BattleRecordAddCard(
                   widget: Container(
                     child: FutureBuilder(
@@ -64,7 +71,10 @@ class MyBattleRecordAdd extends StatelessWidget {
                     ),
                   ),
                 ),
-                HeadLine(size: HeadLineSize.Medium, text: "コスト"),
+                HeadLine(
+                    size: HeadLineSize.Medium,
+                    text: "コスト",
+                    textColor: Colors.white),
                 BattleRecordAddCard(
                   widget: Container(
                     child: FutureBuilder(
@@ -94,7 +104,10 @@ class MyBattleRecordAdd extends StatelessWidget {
                         }),
                   ),
                 ),
-                HeadLine(size: HeadLineSize.Medium, text: "対戦人数"),
+                HeadLine(
+                    size: HeadLineSize.Medium,
+                    text: "対戦人数",
+                    textColor: Colors.white),
                 BattleRecordAddCard(
                   widget: Container(
                     child: FutureBuilder(
@@ -124,12 +137,27 @@ class MyBattleRecordAdd extends StatelessWidget {
                         }),
                   ),
                 ),
-                ElevatedButton(
+                SubmitButton(
                   onPressed: () async {
                     await c.getMsList();
                     Get.off(() => MyBattleRecordAdd2());
                   },
-                  child: myText.Text("次へ"),
+                  child: myText.Text(
+                    "次へ",
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                ),
+                CancelButton(
+                  onPressed: () {
+                    Get.off(() => MainScreen());
+                  },
+                  child: myText.Text(
+                    "前画面に戻る",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14),
+                  ),
                 ),
               ],
             ),

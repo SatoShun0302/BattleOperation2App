@@ -12,6 +12,10 @@ class ErrorMessage {
   static const String numberOfPlayerUnselected = "対戦人数が未選択です";
   /// レートが未入力
   static const String rateNotEntered = "レートが未入力です";
+  /// 自機が未選択
+  static const String ownMsUnselected = "自機が未選択です";
+  /// 僚機が未選択
+  static const String wingmanUnselected = "僚機が未選択です";
 
   static const String overallRankingNotEntered = "総合個人順位が未入力です";
 
@@ -47,5 +51,5 @@ class ErrorMessage {
    * 入力値が不正系
    */
   /// a
-  static const String a = "";
+  static const String illegalInputValue = "入力値が不正です";
 }

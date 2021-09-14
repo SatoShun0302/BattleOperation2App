@@ -1,12 +1,18 @@
+import 'package:battle_operation2_app/common_widget/cancel_button.dart';
 import 'package:battle_operation2_app/common_widget/custom/custom_container.dart';
 import 'package:battle_operation2_app/common_widget/drawer_menu.dart';
 import 'package:battle_operation2_app/common_widget/headline.dart';
+import 'package:battle_operation2_app/common_widget/submit_button.dart';
+import 'package:battle_operation2_app/components/main_feature/battle_record_add/my_battle_record_add2.dart';
+import 'package:battle_operation2_app/config/color_env.dart';
 import 'package:battle_operation2_app/config/screen_env.dart';
 import 'package:battle_operation2_app/controller/my_battle_record_add_controller.dart';
+import 'package:battle_operation2_app/helper/list_util.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
 import 'package:battle_operation2_app/importer/dart_importer.dart';
 import 'package:battle_operation2_app/common_widget/custom/my_text.dart'
     as myText;
+import 'package:flutter/cupertino.dart';
 
 class MyBattleRecordAdd3 extends StatelessWidget {
   final MyBattleRecordAddController c = Get.find(tag: "myBattleRecordAdd");
@@ -17,9 +23,10 @@ class MyBattleRecordAdd3 extends StatelessWidget {
     final rateNumController = new TextEditingController();
     rateNumController.text = c.currentRateNum.value;
     return Scaffold(
+      backgroundColor: ColorEnv.scaffoldBackground,
       appBar: AppBar(
         title: Text("試合結果入力"),
-        backgroundColor: Colors.orange,
+        backgroundColor: ColorEnv.appBarBackground,
       ),
       drawer: SafeArea(
         child: Drawer(
@@ -33,7 +40,11 @@ class MyBattleRecordAdd3 extends StatelessWidget {
           child: CustomContainer(
             widget: Column(
               children: <Widget>[
-                HeadLine(size: HeadLineSize.Medium, text: "レート"),
+                HeadLine(
+                    size: HeadLineSize.Medium,
+                    text: "レート",
+                    textColor: Colors.white,
+                    fontWeight: FontWeight.bold),
                 Card(
                   elevation: 5,
                   child: Padding(
@@ -47,32 +58,28 @@ class MyBattleRecordAdd3 extends StatelessWidget {
                                 bottom: ScreenEnv.deviceWidth * 0.01,
                                 right: ScreenEnv.deviceWidth * 0.02),
                             child: TextFormField(
-                                controller: rateNumController,
-                                maxLength: 4,
-                                maxLengthEnforcement:
-                                    MaxLengthEnforcement.enforced,
-                                autovalidateMode: AutovalidateMode.always,
-                                keyboardType: TextInputType.number,
-                                textAlign: TextAlign.center,
-                                validator: (String? value) {
-                                  if (value!.isEmpty) {
-                                    return "レートを入力してください";
-                                  }
-                                  // 数値変換可能な値かチェック
-                                  if (int.tryParse(value) == null) {
-                                    return "数値を入力してください";
-                                  }
-                                },
-                                onChanged: (String value) {
-                                  // 入力値が空でないかつ数値変換可能な場合のみ変数を更新
-                                  if (value.isNotEmpty) {
-                                    if (int.tryParse(value) != null) {
-                                      c.currentRateNum.value = value;
-                                      rateNumController.text = c.currentRateNum.value;
-                                    }
-                                  }
-                                },
-                              ),
+                              controller: rateNumController,
+                              maxLength: 4,
+                              maxLengthEnforcement:
+                                  MaxLengthEnforcement.enforced,
+                              autovalidateMode: AutovalidateMode.always,
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              validator: (String? value) {
+                                if (value!.isEmpty) {
+                                  return "レートを入力してください";
+                                }
+                                // 数値変換可能な値かチェック
+                                if (int.tryParse(value) == null) {
+                                  return "数値を入力してください";
+                                }
+                              },
+                              onChanged: (String value) {
+                                // 入力値が空でないかつ数値変換可能な場合のみ変数を更新
+                                c.currentRateNum.value = value;
+                                rateNumController.text = c.currentRateNum.value;
+                              },
+                            ),
                           ),
                         ),
                         // レート値１アップ
@@ -87,13 +94,16 @@ class MyBattleRecordAdd3 extends StatelessWidget {
                                       size: ScreenEnv.deviceWidth * 0.08),
                                   splashRadius: ScreenEnv.deviceWidth * 0.07,
                                   padding: EdgeInsets.all(0),
-                                  tooltip: c.copyHint,
                                   onPressed: () {
-                                    int? rate = int.tryParse(c.currentRateNum.value);
-                                    if (rate != null) {
-                                      rate ++;
-                                      c.currentRateNum.value = "$rate";
-                                      rateNumController.text = c.currentRateNum.value;
+                                    if (c.currentRateNum.value.isNotEmpty) {
+                                      int? rate =
+                                          int.tryParse(c.currentRateNum.value);
+                                      if (rate != null) {
+                                        rate++;
+                                        c.currentRateNum.value = "$rate";
+                                        rateNumController.text =
+                                            c.currentRateNum.value;
+                                      }
                                     }
                                   },
                                 ),
@@ -106,13 +116,20 @@ class MyBattleRecordAdd3 extends StatelessWidget {
                                       size: ScreenEnv.deviceWidth * 0.08),
                                   splashRadius: ScreenEnv.deviceWidth * 0.07,
                                   padding: EdgeInsets.all(0),
-                                  tooltip: c.favoriteHint,
                                   onPressed: () {
-                                    int? rate = int.tryParse(c.currentRateNum.value);
-                                    if (rate != null) {
-                                      rate --;
-                                      c.currentRateNum.value = "$rate";
-                                      rateNumController.text = c.currentRateNum.value;
+                                    if (c.currentRateNum.value.isNotEmpty) {
+                                      int? rate =
+                                          int.tryParse(c.currentRateNum.value);
+                                      if (rate != null) {
+                                        if (0 <
+                                            int.tryParse(
+                                                c.currentRateNum.value)!) {
+                                          rate--;
+                                          c.currentRateNum.value = "$rate";
+                                          rateNumController.text =
+                                              c.currentRateNum.value;
+                                        }
+                                      }
                                     }
                                   },
                                 ),
@@ -124,7 +141,11 @@ class MyBattleRecordAdd3 extends StatelessWidget {
                     ),
                   ),
                 ),
-                HeadLine(size: HeadLineSize.Medium, text: "勝敗"),
+                HeadLine(
+                    size: HeadLineSize.Medium,
+                    text: "勝敗",
+                    textColor: Colors.white,
+                    fontWeight: FontWeight.bold),
                 Card(
                   elevation: 5,
                   child: Padding(
@@ -136,64 +157,70 @@ class MyBattleRecordAdd3 extends StatelessWidget {
                             text: "チーム",
                             showUnderLine: true),
                         Obx(
-                              () => Row(
-                          children: [
-                            Expanded(
-                              child: RadioListTile<int>(
-                                title: Text("勝利"),
-                                value: 1,
-                                groupValue: c.winOrLoseResultTeam.value,
-                                onChanged: (int? value) {
-                                  c.winOrLoseResultTeam.value = value ??= -1;
-                                },
+                          () => Row(
+                            children: [
+                              Expanded(
+                                child: RadioListTile<int>(
+                                  title: Text("勝利"),
+                                  value: 1,
+                                  groupValue: c.winOrLoseResultTeam.value,
+                                  onChanged: (int? value) {
+                                    c.winOrLoseResultTeam.value = value ??= -1;
+                                  },
+                                ),
                               ),
-                            ),
-                            Expanded(
-                              child: RadioListTile<int>(
-                                title: Text("敗北"),
-                                value: 0,
-                                groupValue: c.winOrLoseResultTeam.value,
-                                onChanged: (int? value) {
-                                  c.winOrLoseResultTeam.value = value ??= -1;
-                                },
+                              Expanded(
+                                child: RadioListTile<int>(
+                                  title: Text("敗北"),
+                                  value: 0,
+                                  groupValue: c.winOrLoseResultTeam.value,
+                                  onChanged: (int? value) {
+                                    c.winOrLoseResultTeam.value = value ??= -1;
+                                  },
+                                ),
                               ),
-                            ),
-                          ],
-                        ),),
+                            ],
+                          ),
+                        ),
                         HeadLine(
                             size: HeadLineSize.Small,
                             text: "ライバル",
                             showUnderLine: true),
                         Obx(
-                              () => Row(
-                          children: [
-                            Expanded(
-                              child: RadioListTile<int>(
-                                title: Text("勝利"),
-                                value: 1,
-                                groupValue: c.winOrLoseResultRival.value,
-                                onChanged: (int? value) {
-                                  c.winOrLoseResultRival.value = value ??= -1;
-                                },
+                          () => Row(
+                            children: [
+                              Expanded(
+                                child: RadioListTile<int>(
+                                  title: Text("勝利"),
+                                  value: 1,
+                                  groupValue: c.winOrLoseResultRival.value,
+                                  onChanged: (int? value) {
+                                    c.winOrLoseResultRival.value = value ??= -1;
+                                  },
+                                ),
                               ),
-                            ),
-                            Expanded(
-                              child: RadioListTile<int>(
-                                title: Text("敗北"),
-                                value: 0,
-                                groupValue: c.winOrLoseResultRival.value,
-                                onChanged: (int? value) {
-                                  c.winOrLoseResultRival.value = value ??= -1;
-                                },
+                              Expanded(
+                                child: RadioListTile<int>(
+                                  title: Text("敗北"),
+                                  value: 0,
+                                  groupValue: c.winOrLoseResultRival.value,
+                                  onChanged: (int? value) {
+                                    c.winOrLoseResultRival.value = value ??= -1;
+                                  },
+                                ),
                               ),
-                            ),
-                          ],
-                        ),),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
                 ),
-                HeadLine(size: HeadLineSize.Medium, text: "戦績"),
+                HeadLine(
+                    size: HeadLineSize.Medium,
+                    text: "戦績",
+                    textColor: Colors.white,
+                    fontWeight: FontWeight.bold),
                 Card(
                   elevation: 5,
                   child: Padding(
@@ -229,7 +256,15 @@ class MyBattleRecordAdd3 extends StatelessWidget {
                                       // 数値変換可能な値かチェック
                                       if (int.tryParse(value) == null) {
                                         return "error";
+                                      } else {
+                                        if (int.tryParse(value)! <= 0) {
+                                          return "error";
+                                        }
                                       }
+                                    },
+                                    onChanged: (String value) {
+                                      // 入力値が空でないかつ数値変換可能な場合のみ変数を更新
+                                      c.overallRanking.value = value;
                                     },
                                   ),
                                 ),
@@ -267,7 +302,15 @@ class MyBattleRecordAdd3 extends StatelessWidget {
                                       // 数値変換可能な値かチェック
                                       if (int.tryParse(value) == null) {
                                         return "error";
+                                      } else {
+                                        if (int.tryParse(value)! <= 0) {
+                                          return "error";
+                                        }
                                       }
+                                    },
+                                    onChanged: (String value) {
+                                      // 入力値が空でないかつ数値変換可能な場合のみ変数を更新
+                                      c.personalScoreRanking.value = value;
                                     },
                                   ),
                                 ),
@@ -297,7 +340,15 @@ class MyBattleRecordAdd3 extends StatelessWidget {
                                       // 数値変換可能な値かチェック
                                       if (int.tryParse(value) == null) {
                                         return "error";
+                                      } else {
+                                        if (int.tryParse(value)! < 0) {
+                                          return "error";
+                                        }
                                       }
+                                    },
+                                    onChanged: (String value) {
+                                      // 入力値が空でないかつ数値変換可能な場合のみ変数を更新
+                                      c.personalScore.value = value;
                                     },
                                   ),
                                 ),
@@ -335,7 +386,15 @@ class MyBattleRecordAdd3 extends StatelessWidget {
                                       // 数値変換可能な値かチェック
                                       if (int.tryParse(value) == null) {
                                         return "error";
+                                      } else {
+                                        if (int.tryParse(value)! <= 0) {
+                                          return "error";
+                                        }
                                       }
+                                    },
+                                    onChanged: (String value) {
+                                      // 入力値が空でないかつ数値変換可能な場合のみ変数を更新
+                                      c.assistScoreRanking.value = value;
                                     },
                                   ),
                                 ),
@@ -365,7 +424,15 @@ class MyBattleRecordAdd3 extends StatelessWidget {
                                       // 数値変換可能な値かチェック
                                       if (int.tryParse(value) == null) {
                                         return "error";
+                                      } else {
+                                        if (int.tryParse(value)! < 0) {
+                                          return "error";
+                                        }
                                       }
+                                    },
+                                    onChanged: (String value) {
+                                      // 入力値が空でないかつ数値変換可能な場合のみ変数を更新
+                                      c.assistScore.value = value;
                                     },
                                   ),
                                 ),
@@ -403,7 +470,15 @@ class MyBattleRecordAdd3 extends StatelessWidget {
                                       // 数値変換可能な値かチェック
                                       if (int.tryParse(value) == null) {
                                         return "error";
+                                      } else {
+                                        if (int.tryParse(value)! <= 0) {
+                                          return "error";
+                                        }
                                       }
+                                    },
+                                    onChanged: (String value) {
+                                      // 入力値が空でないかつ数値変換可能な場合のみ変数を更新
+                                      c.dealDamageRanking.value = value;
                                     },
                                   ),
                                 ),
@@ -433,7 +508,15 @@ class MyBattleRecordAdd3 extends StatelessWidget {
                                       // 数値変換可能な値かチェック
                                       if (int.tryParse(value) == null) {
                                         return "error";
+                                      } else {
+                                        if (int.tryParse(value)! < 0) {
+                                          return "error";
+                                        }
                                       }
+                                    },
+                                    onChanged: (String value) {
+                                      // 入力値が空でないかつ数値変換可能な場合のみ変数を更新
+                                      c.dealDamage.value = value;
                                     },
                                   ),
                                 ),
@@ -471,7 +554,15 @@ class MyBattleRecordAdd3 extends StatelessWidget {
                                       // 数値変換可能な値かチェック
                                       if (int.tryParse(value) == null) {
                                         return "error";
+                                      } else {
+                                        if (int.tryParse(value)! <= 0) {
+                                          return "error";
+                                        }
                                       }
+                                    },
+                                    onChanged: (String value) {
+                                      // 入力値が空でないかつ数値変換可能な場合のみ変数を更新
+                                      c.feintRanking.value = value;
                                     },
                                   ),
                                 ),
@@ -501,7 +592,15 @@ class MyBattleRecordAdd3 extends StatelessWidget {
                                       // 数値変換可能な値かチェック
                                       if (double.tryParse(value) == null) {
                                         return "error";
+                                      } else {
+                                        if (double.tryParse(value)! < 0) {
+                                          return "error";
+                                        }
                                       }
+                                    },
+                                    onChanged: (String value) {
+                                      // 入力値が空でないかつ数値変換可能な場合のみ変数を更新
+                                      c.feint.value = value;
                                     },
                                   ),
                                 ),
@@ -539,7 +638,15 @@ class MyBattleRecordAdd3 extends StatelessWidget {
                                       // 数値変換可能な値かチェック
                                       if (int.tryParse(value) == null) {
                                         return "error";
+                                      } else {
+                                        if (int.tryParse(value)! <= 0) {
+                                          return "error";
+                                        }
                                       }
+                                    },
+                                    onChanged: (String value) {
+                                      // 入力値が空でないかつ数値変換可能な場合のみ変数を更新
+                                      c.msDefeatRanking.value = value;
                                     },
                                   ),
                                 ),
@@ -569,7 +676,15 @@ class MyBattleRecordAdd3 extends StatelessWidget {
                                       // 数値変換可能な値かチェック
                                       if (int.tryParse(value) == null) {
                                         return "error";
+                                      } else {
+                                        if (int.tryParse(value)! < 0) {
+                                          return "error";
+                                        }
                                       }
+                                    },
+                                    onChanged: (String value) {
+                                      // 入力値が空でないかつ数値変換可能な場合のみ変数を更新
+                                      c.msDefeat.value = value;
                                     },
                                   ),
                                 ),
@@ -607,7 +722,15 @@ class MyBattleRecordAdd3 extends StatelessWidget {
                                       // 数値変換可能な値かチェック
                                       if (int.tryParse(value) == null) {
                                         return "error";
+                                      } else {
+                                        if (int.tryParse(value)! <= 0) {
+                                          return "error";
+                                        }
                                       }
+                                    },
+                                    onChanged: (String value) {
+                                      // 入力値が空でないかつ数値変換可能な場合のみ変数を更新
+                                      c.msLossRanking.value = value;
                                     },
                                   ),
                                 ),
@@ -637,7 +760,15 @@ class MyBattleRecordAdd3 extends StatelessWidget {
                                       // 数値変換可能な値かチェック
                                       if (int.tryParse(value) == null) {
                                         return "error";
+                                      } else {
+                                        if (int.tryParse(value)! < 0) {
+                                          return "error";
+                                        }
                                       }
+                                    },
+                                    onChanged: (String value) {
+                                      // 入力値が空でないかつ数値変換可能な場合のみ変数を更新
+                                      c.msLoss.value = value;
                                     },
                                   ),
                                 ),
@@ -675,7 +806,15 @@ class MyBattleRecordAdd3 extends StatelessWidget {
                                       // 数値変換可能な値かチェック
                                       if (int.tryParse(value) == null) {
                                         return "error";
+                                      } else {
+                                        if (int.tryParse(value)! <= 0) {
+                                          return "error";
+                                        }
                                       }
+                                    },
+                                    onChanged: (String value) {
+                                      // 入力値が空でないかつ数値変換可能な場合のみ変数を更新
+                                      c.pursuitAssistRanking.value = value;
                                     },
                                   ),
                                 ),
@@ -706,6 +845,10 @@ class MyBattleRecordAdd3 extends StatelessWidget {
                                         return "error";
                                       }
                                     },
+                                    onChanged: (String value) {
+                                      // 入力値が空でないかつ数値変換可能な場合のみ変数を更新
+                                      c.pursuitAssist.value = value;
+                                    },
                                   ),
                                 ),
                               ),
@@ -716,17 +859,54 @@ class MyBattleRecordAdd3 extends StatelessWidget {
                     ),
                   ),
                 ),
-                ElevatedButton(
+                SubmitButton(
+                    child: myText.Text(
+                      "登録",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    ),
+                    onPressed: () {
+                      List<String> validateResult = c.recordAdd3Validate();
+                      if (validateResult.isNotEmpty) {
+                        Get.snackbar(
+                          "",
+                          "",
+                          titleText: myText.Text(
+                            "エラー",
+                            style: TextStyle(
+                                color: Colors.amber,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18),
+                          ),
+                          messageText: myText.Text(
+                            ListUtil.createSnackBarMessage(validateResult),
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                          isDismissible: true,
+                          duration: Duration(
+                              seconds:
+                                  ListUtil.calcSnackBarDurationFromListLength(
+                                      validateResult)),
+                          backgroundColor: ColorEnv.snackBarBackground,
+                        );
+                      } else {
+                        print("else");
+                        //Get.off(() => MyBattleRecordAdd3());
+                      }
+                    }),
+                CancelButton(
                   onPressed: () {
-                    print("test");
+                    Get.off(() => MyBattleRecordAdd2());
                   },
-                  child: myText.Text("登録"),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    print("test");
-                  },
-                  child: myText.Text("修正"),
+                  child: myText.Text(
+                    "前画面に戻る",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14),
+                  ),
                 ),
               ],
             ),

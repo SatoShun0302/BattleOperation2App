@@ -59,6 +59,7 @@ class MyBattleRecordAddController extends GetxController {
   RxInt choosedMsId4 = 0.obs;
   RxInt choosedMsId5 = 0.obs;
   RxInt choosedMsId6 = 0.obs;
+  RxMap choosedMsMap1 = RxMap();
   RxMap choosedMsMap2 = RxMap();
   RxMap choosedMsMap3 = RxMap();
   RxMap choosedMsMap4 = RxMap();
@@ -148,12 +149,32 @@ class MyBattleRecordAddController extends GetxController {
   /// 曜日別勝率
   Map<String, int> dayOfTheWeekWinRate = new Map();
 
+  /// 襲撃前情報入力画面１を開いた際および戦績登録完了後に、特定の変数を初期化する.
+  ///
+  /// 選択済マップ,コスト,対戦人数については連戦を想定し初期化しない.
+  void init() {
+    // 出撃前情報入力画面２で使用する変数を初期化
+    choosedMsId1.value = 0;
+    choosedMsId2.value = 0;
+    choosedMsId3.value = 0;
+    choosedMsId4.value = 0;
+    choosedMsId5.value = 0;
+    choosedMsId6.value = 0;
+    choosedMsMap1.value = {};
+    choosedMsMap2.value = {};
+    choosedMsMap3.value = {};
+    choosedMsMap4.value = {};
+    choosedMsMap5.value = {};
+    choosedMsMap6.value = {};
+    choosedSide = BattleRecordEnv.teamSideA.obs;
+    choosedPrediction = BattleRecordEnv.win.obs;
+  }
 
   /// 出撃準備画面１で使用する、マップ一覧を取得する.
   Future<void> getMapList() async {
-    MapListRepository mlr = new MapListRepository();
-    List<MapList> mapLists = await mlr.getRecord();
     if (mapDropdownList.isEmpty) {
+      MapListRepository mlr = new MapListRepository();
+      List<MapList> mapLists = await mlr.getRecord();
       mapLists.asMap().forEach((index, mapList) {
         if (index == 0) {
           choosedMapId.value = mapList.mapId!;
@@ -170,12 +191,10 @@ class MyBattleRecordAddController extends GetxController {
   }
 
   /// 出撃準備画面１で使用する、コスト一覧を取得する.
-  ///
-  /// 出撃準備画面１の出撃ボタン押下時に処理を行う.
   Future<void> getCostList() async {
-    CostListRepository clr = new CostListRepository();
-    List<Cost> costList = await clr.getRecord();
     if (costDropdownList.isEmpty) {
+      CostListRepository clr = new CostListRepository();
+      List<Cost> costList = await clr.getRecord();
       costList.asMap().forEach((index, cost) {
         if (index == 0) {
           choosedCost.value = cost.cost!;
@@ -196,15 +215,15 @@ class MyBattleRecordAddController extends GetxController {
     if (numberOfPlayerList.isEmpty) {
       BattleRecordEnv.numberOfPlayer.asMap().forEach((index, value) {
         if (index == 0) {
-          // 1チームの人数と合わせるためにindexに1をプラスする
-          choosedNumberOfPlayer.value = index + 1;
+          // 1チームの人数と合わせるためにindexに5をプラスする(レートの最低人数が5人の場合)
+          choosedNumberOfPlayer.value = index + 5;
         }
         numberOfPlayerList.add(DropdownMenuItem(
           child: myText.Text(
             value,
             style: TextStyle(fontSize: 15.0),
           ),
-          value: index + 1,
+          value: index + 5,
         ));
       });
     }
@@ -255,6 +274,7 @@ class MyBattleRecordAddController extends GetxController {
       return battleRecordCache[_msListMapKey]!;
     }
   }
+
   /// record_add1の次へボタン押下時にバリデーションを行う.
   ///
   /// マップ,コスト,対戦人数未入力でないかを確認.
@@ -270,6 +290,38 @@ class MyBattleRecordAddController extends GetxController {
     if (choosedNumberOfPlayer.value == 0) {
       errorMessage.add(ErrorMessage.numberOfPlayerUnselected);
     }
+    return errorMessage;
+  }
+
+  /// record_add2の出撃ボタン押下時にバリデーションを行う.
+  ///
+  /// 自機、僚機が未選択でないかを確認.
+  /// @return List<String> errorMessage: エラーメッセージリスト
+  List<String> recordAdd2Validate() {
+    List<String> errorMessage = [];
+    if (choosedMsId1.value == 0) {
+      errorMessage.add(ErrorMessage.ownMsUnselected);
+    }
+    if (choosedMsId2.value == 0) {
+      errorMessage.add(ErrorMessage.wingmanUnselected);
+    }
+    if (choosedMsId3.value == 0) {
+      errorMessage.add(ErrorMessage.wingmanUnselected);
+    }
+    if (choosedMsId4.value == 0) {
+      errorMessage.add(ErrorMessage.wingmanUnselected);
+    }
+    if (choosedMsId5.value == 0) {
+      errorMessage.add(ErrorMessage.wingmanUnselected);
+    }
+    // 対戦人数が12人（1チーム6人）の場合のみバリデーションを行う
+    if (choosedNumberOfPlayer.value == 6) {
+      if (choosedMsId6.value == 0) {
+        errorMessage.add(ErrorMessage.wingmanUnselected);
+      }
+    }
+    // 僚機未選択メッセージが重複している場合は削除する
+    errorMessage = errorMessage.toSet().toList();
     return errorMessage;
   }
 
@@ -290,58 +342,121 @@ class MyBattleRecordAddController extends GetxController {
     } else if (currentRateNum.value.isEmpty) {
       errorMessage.add(ErrorMessage.rateNotEntered);
     }
+    /**
+     * 以下のvalueは、ウィジェット側で数値変換可能かを判断し変換できる場合のみ代入済み
+     */
     // 総合個人順位
     if (overallRanking.value.isEmpty) {
       errorMessage.add(ErrorMessage.overallRankingNotEntered);
+    } else {
+      if (int.tryParse(overallRanking.value)! <= 0) {
+        errorMessage.add("総合個人順位の${ErrorMessage.illegalInputValue}");
+      }
     }
     // 個人スコア
     if (personalScoreRanking.value.isEmpty) {
       errorMessage.add(ErrorMessage.personalScoreRankingNotEntered);
+    } else {
+      if (int.tryParse(personalScoreRanking.value)! <= 0) {
+        errorMessage.add("個人スコア順位の${ErrorMessage.illegalInputValue}");
+      }
     }
     if (personalScore.value.isEmpty) {
       errorMessage.add(ErrorMessage.personalScoreNotEntered);
+    } else {
+      if (int.tryParse(personalScore.value)! <= -1) {
+        errorMessage.add("個人スコアの${ErrorMessage.illegalInputValue}");
+      }
     }
     // アシストスコア
     if (assistScoreRanking.value.isEmpty) {
       errorMessage.add(ErrorMessage.assistScoreRankingNotEntered);
+    } else {
+      if (int.tryParse(assistScoreRanking.value)! <= 0) {
+        errorMessage.add("アシストスコア順位の${ErrorMessage.illegalInputValue}");
+      }
     }
     if (assistScore.value.isEmpty) {
       errorMessage.add(ErrorMessage.assistScoreNotEntered);
+    } else {
+      if (int.tryParse(assistScore.value)! <= -1) {
+        errorMessage.add("アシストスコアの${ErrorMessage.illegalInputValue}");
+      }
     }
     // 与ダメージ
     if (dealDamageRanking.value.isEmpty) {
       errorMessage.add(ErrorMessage.dealDamageRankingNotEntered);
+    } else {
+      if (int.tryParse(dealDamageRanking.value)! <= 0) {
+        errorMessage.add("与ダメージ順位の${ErrorMessage.illegalInputValue}");
+      }
     }
     if (dealDamage.value.isEmpty) {
       errorMessage.add(ErrorMessage.dealDamageNotEntered);
+    } else {
+      if (int.tryParse(dealDamage.value)! <= -1) {
+        errorMessage.add("与ダメージの${ErrorMessage.illegalInputValue}");
+      }
     }
     // 陽動
     if (feintRanking.value.isEmpty) {
       errorMessage.add(ErrorMessage.feintRankingNotEntered);
+    } else {
+      if (double.tryParse(feintRanking.value)! <= 0) {
+        errorMessage.add("陽動順位の${ErrorMessage.illegalInputValue}");
+      }
     }
     if (feint.value.isEmpty) {
       errorMessage.add(ErrorMessage.feintNotEntered);
+    } else {
+      if (double.tryParse(feint.value)! <= -1) {
+        errorMessage.add("陽動の${ErrorMessage.illegalInputValue}");
+      }
     }
     // MS撃破
     if (msDefeatRanking.value.isEmpty) {
       errorMessage.add(ErrorMessage.msDefeatRankingNotEntered);
+    } else {
+      if (int.tryParse(msDefeatRanking.value)! <= 0) {
+        errorMessage.add("MS撃破順位の${ErrorMessage.illegalInputValue}");
+      }
     }
     if (msDefeat.value.isEmpty) {
       errorMessage.add(ErrorMessage.msDefeatNotEntered);
+    } else {
+      if (int.tryParse(msDefeat.value)! <= -1) {
+        errorMessage.add("MS撃破の${ErrorMessage.illegalInputValue}");
+      }
     }
     // MS損失
     if (msLossRanking.value.isEmpty) {
       errorMessage.add(ErrorMessage.msLossRankingNotEntered);
+    } else {
+      if (int.tryParse(msLossRanking.value)! <= 0) {
+        errorMessage.add("MS損失順位の${ErrorMessage.illegalInputValue}");
+      }
     }
     if (msLoss.value.isEmpty) {
       errorMessage.add(ErrorMessage.msLossNotEntered);
+    } else {
+      if (int.tryParse(msLoss.value)! <= -1) {
+        errorMessage.add("MS損失の${ErrorMessage.illegalInputValue}");
+      }
     }
     // 追撃アシスト
     if (pursuitAssistRanking.value.isEmpty) {
       errorMessage.add(ErrorMessage.pursuitAssistRankingNotEntered);
+    } else {
+      if (int.tryParse(pursuitAssistRanking.value)! <= 0) {
+        errorMessage.add("追撃アシスト順位の${ErrorMessage.illegalInputValue}");
+      }
     }
     if (pursuitAssist.value.isEmpty) {
       errorMessage.add(ErrorMessage.pursuitAssistNotEntered);
+    } else {
+      if (int.tryParse(pursuitAssist.value)! <= -1) {
+        errorMessage.add("追撃アシストの${ErrorMessage.illegalInputValue}");
+      }
     }
     return errorMessage;
   }

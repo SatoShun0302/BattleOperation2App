@@ -1,8 +1,10 @@
+import 'package:battle_operation2_app/helper/datetime_util.dart';
 import 'package:battle_operation2_app/importer/myclass_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
 import 'package:battle_operation2_app/importer/dart_importer.dart';
 import 'package:battle_operation2_app/common_widget/custom/my_text.dart'
 as myText;
+import 'package:battle_operation2_app/repository/battle_record_repository.dart';
 
 class MyBattleRecord extends StatelessWidget {
   @override
@@ -29,13 +31,21 @@ class MyBattleRecord extends StatelessWidget {
         ],
         initialActiveIndex: 1,
         onTap: (int i) {
-          print(i);
+          var now = new DateTime.now();
+          print(now);
+          print(now.timeZoneName);
+          print(DateTimeUtil.weekdayNumConvertToString(now.weekday));
+          print(DateTimeUtil.dateTimeConvertToUnixTime(now));
+          print(DateTimeUtil.unixTimeConvertToDateTime(DateTimeUtil.dateTimeConvertToUnixTime(now)));
+          print(DateTimeUtil.dateTimeConvertToString(now));
           switch(i) {
             case 0:
               print("index0");
               break;
             case 1:
               print("index1");
+              BattleRecordRepository battleRecordRepository = new BattleRecordRepository();
+              battleRecordRepository.initInsertTestRecords();
               break;
             case 2:
               print("index2");
