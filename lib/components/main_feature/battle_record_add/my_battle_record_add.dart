@@ -19,7 +19,6 @@ class MyBattleRecordAdd extends StatelessWidget {
   final MyBattleRecordAddController c = Get.find(tag: "myBattleRecordAdd");
   @override
   Widget build(BuildContext context) {
-    c.init();
     return Scaffold(
       backgroundColor: ColorEnv.scaffoldBackground,
       appBar: AppBar(

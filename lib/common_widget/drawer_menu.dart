@@ -1,3 +1,4 @@
+import 'package:battle_operation2_app/controller/my_battle_record_add_controller.dart';
 import 'package:battle_operation2_app/importer/myclass_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
 import 'package:battle_operation2_app/importer/dart_importer.dart';
@@ -43,7 +44,7 @@ class DrawerMenu {
             clr.initInsertRecords();
           },
         ),
-        _profileListTile(),
+        _profileListTile()!,
         _battleRecordListTile(),
         _voteListTile(),
         _settingListTile(),
@@ -62,7 +63,7 @@ class DrawerMenu {
   }
 
   // プロフィール確認、編集
-  Widget _profileListTile() {
+  Widget? _profileListTile() {
     return ExpansionTile(
       leading: FaIcon(FontAwesomeIcons.addressCard),
       childrenPadding: EdgeInsets.only(left: ScreenEnv.deviceWidth * 0.1),
@@ -111,6 +112,8 @@ class DrawerMenu {
           title: Text('試合データ登録',
             textScaleFactor: 1,),
           onTap: () {
+            final MyBattleRecordAddController c = Get.find(tag: "myBattleRecordAdd");
+            c.init();
             Get.off(() => MyBattleRecordAdd());
             print("2-2");
           },

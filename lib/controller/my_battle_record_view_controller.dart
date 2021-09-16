@@ -1,8 +1,11 @@
+import 'package:battle_operation2_app/controller/my_battle_record_add_controller.dart';
 import 'package:battle_operation2_app/importer/myclass_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
 import 'package:battle_operation2_app/importer/dart_importer.dart';
 
-class MyBattleRecordViewController {
+/// 過去
+class MyBattleRecordViewController extends GetxController {
+  final MyBattleRecordAddController c = Get.find(tag: "myBattleRecordAdd");
 
   /// 一度検索されたマップとコストのデータを保持したインスタンスを格納する
   ///
@@ -17,9 +20,6 @@ class MyBattleRecordViewController {
   /// 宇宙マップのドロップダウンリスト
   Map<int, String> spaceStageList = new Map();
 
-  /// 選択されたマップのid　地上は1001~1999　宇宙は2001~2999
-  RxInt choosedStageId = 0.obs;
-
   /// コストリスト
   List<int> costList = [];
 
@@ -29,14 +29,17 @@ class MyBattleRecordViewController {
   /// 選択されたコスト帯
   RxInt choosedCost = 0.obs;
 
+  /// 選択されたマップのid　地上は1001~1999　宇宙は2001~2999
+  RxInt choosedStageId = 0.obs;
+
   /// レコード数(総試合数)
-  int recordNum = 0;
+  int totalRecordNum = 0;
 
   /// 勝利数
-  int winNum = 0;
+  int totalWinNum = 0;
 
   /// 敗北数
-  int loseNum = 0;
+  int totalLoseNum = 0;
 
   /// 汎用使用数
   int useGeneralNum = 0;
