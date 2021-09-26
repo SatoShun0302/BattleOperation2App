@@ -1,5 +1,6 @@
 import 'package:battle_operation2_app/common_widget/drawer_menu.dart';
-import 'package:battle_operation2_app/controller/my_battle_record_view_controller.dart';
+import 'package:battle_operation2_app/controller/all_data_view_controller.dart';
+import 'package:battle_operation2_app/controller/parts/battle_record_view_bottom_controller.dart';
 import 'package:battle_operation2_app/importer/myclass_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
 import 'package:battle_operation2_app/repository/map_list_repository.dart';
@@ -64,9 +65,11 @@ Future<void> main() async {
   /**
    * コントローラーを定義する
    */
-  final MyBattleRecordAddController myBattleRecordAddController = Get.put(MyBattleRecordAddController(), tag: "myBattleRecordAdd");
-  Get.put(MyBattleRecordViewController(), tag: "myBattleRecordView");
-
+  // メイン画面
+  Get.put(MyBattleRecordAddController(), tag: "myBattleRecordAdd");
+  Get.put(AllDataViewController(), tag: "allDataView");
+  // パーツ
+  Get.put(BattleRecordViewBottomController(), tag: "battleRecordViewBottomNavigation");
 
   runApp(GetMaterialApp(
     home: MainScreen(),

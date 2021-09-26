@@ -45,4 +45,29 @@ class NumericConversionUtil {
     }
     return _map;
   }
+
+  /// 数値を受け取り、パーセンテージに変換したStringを返す.
+  ///
+  /// 小数点以下が全て0の場合は小数点以下を切り捨てる.
+  ///
+  /// @param num.
+  /// @param digits=2 表示する小数点以下の桁数.
+  /// @param suffix="%" 数字の末尾に加える文字.
+  static String? numConvertToPercentage(dynamic num, {int digits = 2, String suffix = "%"}) {
+    if (num.runtimeType == double) {
+      double _tmpNum = num * 100;
+      String _tmpStrNum = _tmpNum.toStringAsFixed(digits);
+      List _tmpList = _tmpStrNum.split(".");
+      int _afterDecimalPointNum = int.parse(_tmpList[1]);
+      if (_afterDecimalPointNum == 0) {
+        return "${_tmpList[0]}" + suffix;
+      } else {
+        return _tmpStrNum + suffix;
+      }
+    } else if (num.runtimeType == int) {
+      return "$num" + suffix;
+    } else {
+      return null;
+    }
+  }
 }

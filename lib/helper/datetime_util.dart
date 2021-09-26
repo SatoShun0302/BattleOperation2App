@@ -1,7 +1,8 @@
 
+import 'package:battle_operation2_app/importer/dart_importer.dart';
 import 'package:intl/intl.dart';
 
-/// 日付操作用メソッドを定義した汎用クラス
+/// 日付や曜日を受け取りデータを返すメソッドを定義した汎用クラス.
 class DateTimeUtil {
   static const String monday = "月";
   static const String tuesday = "火";
@@ -10,6 +11,7 @@ class DateTimeUtil {
   static const String friday = "金";
   static const String saturday = "土";
   static const String sunday = "日";
+  static const String weekdaysSuffix = "曜日";
   static const int mondayNum = 1;
   static const int tuesdayNum = 2;
   static const int wednesdayNum = 3;
@@ -17,7 +19,13 @@ class DateTimeUtil {
   static const int fridayNum = 5;
   static const int saturdayNum = 6;
   static const int sundayNum = 7;
-  static const String suffix = "曜日";
+  static const Color mondayColor = Colors.blue;
+  static const Color tuesdayColor = Colors.yellow;
+  static const Color wednesdayColor = Colors.lightBlueAccent;
+  static const Color thursdayColor = Colors.green;
+  static const Color fridayColor = Colors.orange;
+  static const Color saturdayColor = Colors.purple;
+  static const Color sundayColor = Colors.red;
 
   /// 数値で受け取った曜日を文字列で返す.
   ///
@@ -52,9 +60,41 @@ class DateTimeUtil {
         break;
     }
     if (!isAbbreviate) {
-      _strWeekday = _strWeekday + suffix;
+      _strWeekday = _strWeekday + weekdaysSuffix;
     }
     return _strWeekday;
+  }
+
+  /// 数値で受け取った曜日を文字列で返す.
+  ///
+  /// @param weekday DateTimeから取得した曜日の数値.
+  /// @return 曜日毎に設定されたColor.
+  static Color weekdayNumConvertToColor(int weekday) {
+    Color _colorWeekday = Colors.lightGreen;
+    switch (weekday) {
+      case mondayNum:
+        _colorWeekday = mondayColor;
+        break;
+      case tuesdayNum:
+        _colorWeekday = tuesdayColor;
+        break;
+      case wednesdayNum:
+        _colorWeekday = wednesdayColor;
+        break;
+      case thursdayNum:
+        _colorWeekday = thursdayColor;
+        break;
+      case fridayNum:
+        _colorWeekday = fridayColor;
+        break;
+      case saturdayNum:
+        _colorWeekday = saturdayColor;
+        break;
+      case sundayNum:
+        _colorWeekday = sundayColor;
+        break;
+    }
+    return _colorWeekday;
   }
 
   /// DateTime型の日付をunixTimeに変換して返す.

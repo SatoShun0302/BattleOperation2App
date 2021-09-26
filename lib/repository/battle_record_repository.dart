@@ -1,8 +1,8 @@
 import 'package:battle_operation2_app/helper/datetime_util.dart';
 import 'package:battle_operation2_app/importer/myclass_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
-import 'package:battle_operation2_app/model/battle_record.dart';
-import 'package:battle_operation2_app/model/battle_record_wingman.dart';
+import 'package:battle_operation2_app/entity/battle_record.dart';
+import 'package:battle_operation2_app/entity/battle_record_wingman.dart';
 import 'basic_database.dart';
 import 'dart:math' as math;
 
@@ -25,18 +25,24 @@ class BattleRecordRepository extends BasicDatabase {
     DatabaseUtil.createTable(db, 1);
   }
 
-  /// 戦績データを取得する.
+  /// 過去1年分の総合戦績データを取得する.
   ///
-  /// レコード数が膨大なため基本は全件取得はせず、最大1年分とする.
-  Future<List<Map<String, dynamic>>> getRecord(
-      {required List<int> msId}) async {
+  Future<List<BattleRecord>> getRecordUsesAllDataView(
+      {int numberOfPlayer = 6, int durationDays = -365, bool isChosenGround = true}) async {
+    DateTime _dateTime = DateTime.now().add(Duration(days: durationDays));
+    String _where = isChosenGround ?
+    "number_of_player = ? AND map_id BETWEEN 1000 AND 1999 AND insert_date_unix >= ? AND is_deleted = 0" :
+    "number_of_player = ? AND map_id BETWEEN 2000 AND 2999 AND insert_date_unix >= ? AND is_deleted = 0";
     db = await database;
-    String _where = "";
     List<Map<String, dynamic>> map = await db.query(
         DatabaseEnv.battleRecordTable,
-        where: "ms_id in ? AND is_deleted = 0",
-        whereArgs: [msId]);
-    return map;
+        where: _where,
+        whereArgs: [numberOfPlayer, DateTimeUtil.dateTimeConvertToUnixTime(_dateTime)]);
+    List<BattleRecord> _list = [];
+    map.forEach((e) {
+      _list.add(BattleRecord.fromDynamic(e));
+    });
+    return _list;
   }
 
   /// テストデータ挿入
@@ -83,13 +89,16 @@ class BattleRecordRepository extends BasicDatabase {
     List<int> formationList = [141, 231, 51, 132];
     List<int> winOrLose = [0, 1];
     int rateResult = 2400;
+    var rand = new math.Random();
     for (int i = 0; i < 300; i++) {
       if (counter >= 5) {
         today = today.add(Duration(days: 1) * -1);
+        counter = 0;
+        int _hour = rand.nextInt(24);
+        today = new DateTime(today.year, today.month, today.day, _hour, today.minute);
       } else {
         today = today.add(Duration(minutes: 10) * -1);
       }
-      var rand = new math.Random();
       List<int> fall = [-12, -10, -8];
       List<int> rise = [12, 10, 8];
       int winOrLoseResult = (winOrLose..shuffle()).first;

@@ -1,7 +1,11 @@
 
+import 'package:battle_operation2_app/components/main_feature/battle_record_view/view_data_all.dart';
+import 'package:battle_operation2_app/components/main_feature/battle_record_view/view_data_focus_on_cost.dart';
 import 'package:battle_operation2_app/config/screen_env.dart';
 import 'package:battle_operation2_app/controller/my_battle_record_add_controller.dart';
-import 'package:battle_operation2_app/controller/my_battle_record_view_controller.dart';
+import 'package:battle_operation2_app/controller/all_data_view_controller.dart';
+import 'package:battle_operation2_app/controller/parts/battle_record_view_bottom_controller.dart';
+import 'package:battle_operation2_app/helper/calculation_util.dart';
 import 'package:battle_operation2_app/helper/datetime_util.dart';
 import 'package:battle_operation2_app/helper/numeric_conversion_util.dart';
 import 'package:battle_operation2_app/importer/dart_importer.dart';
@@ -12,6 +16,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BattleRecordViewBottomBar extends StatelessWidget {
   final MyBattleRecordAddController c = Get.find(tag: "myBattleRecordAdd");
+  final BattleRecordViewBottomController battleRecordViewBottomController =
+  Get.find(tag: "battleRecordViewBottomNavigation");
   @override
   Widget build(BuildContext context) {
     return ConvexAppBar(
@@ -26,26 +32,19 @@ class BattleRecordViewBottomBar extends StatelessWidget {
       ],
       initialActiveIndex: 0,
       onTap: (int i) {
-        var now = new DateTime.now();
-        print(now);
-        print(now.timeZoneName);
-        // print(DateTimeUtil.weekdayNumConvertToString(now.weekday));
-        // print(DateTimeUtil.dateTimeConvertToUnixTime(now));
-        // print(DateTimeUtil.unixTimeConvertToDateTime(DateTimeUtil.dateTimeConvertToUnixTime(now)));
-        // print(DateTimeUtil.dateTimeConvertToString(now));
+        battleRecordViewBottomController.tabIndex.value = i;
         switch(i) {
           case 0:
             print("index0");
-            var map = NumericConversionUtil.formationConvertToMap(51);
-            print(map);
+
             break;
           case 1:
             print("index1");
 
-            print(c.costDropdownList);
             break;
           case 2:
             print("index2");
+            print(GetPlatform.isAndroid);
             break;
           case 3:
             BattleRecordRepository battleRecordRepository = new BattleRecordRepository();

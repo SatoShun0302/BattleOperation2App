@@ -1,7 +1,7 @@
 import 'package:battle_operation2_app/importer/myclass_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
 import 'package:battle_operation2_app/importer/dart_importer.dart';
-import 'package:battle_operation2_app/model/cost.dart';
+import 'package:battle_operation2_app/entity/cost.dart';
 
 class CostListRepository extends BasicDatabase {
   late Database db;

@@ -4,7 +4,7 @@ import 'package:battle_operation2_app/importer/myclass_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
 import 'package:battle_operation2_app/importer/dart_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
-import 'package:battle_operation2_app/model/cost.dart';
+import 'package:battle_operation2_app/entity/cost.dart';
 import 'package:battle_operation2_app/repository/cost_list_repository.dart';
 import 'package:battle_operation2_app/repository/map_list_repository.dart';
 import 'package:battle_operation2_app/common_widget/custom/my_text.dart'
@@ -20,7 +20,7 @@ class MyBattleRecordAddController extends GetxController {
   /// 一度検索されたマップとコストに対応したMS一覧データを格納する.
   ///
   /// keyは"canGround(canSpace)-cost000"の形式を取る ex."canGround-cost700".
-  Map<String, List<MobileSuit>> battleRecordCache = new Map<String, List<MobileSuit>>();
+  Map<String, List<MobileSuit>> battleRecordCache = {};
 
   /// マップのドロップダウンリスト
   List<DropdownMenuItem<int>> mapDropdownList = [];

@@ -17,6 +17,23 @@ class EnumUtil {
     }
   }
 
+  /// 数値をもとにenum MobileSuitTypeを返す.
+  ///
+  /// @param num 1~3の数字.
+  /// @return enum MobileSuitType または null.
+  static MobileSuitType? getMobileSuitTypeByNum(int num) {
+    switch (num) {
+      case 1:
+        return MobileSuitType.Raid;
+      case 2:
+        return MobileSuitType.General;
+      case 3:
+        return MobileSuitType.Support;
+      default:
+        return null;
+    }
+  }
+
   /// フィールドタイプを返す
   ///
   /// @param FieldType @return String

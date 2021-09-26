@@ -1,3 +1,4 @@
+import 'package:battle_operation2_app/components/main_feature/battle_record_view/my_battle_record_view.dart';
 import 'package:battle_operation2_app/controller/my_battle_record_add_controller.dart';
 import 'package:battle_operation2_app/importer/myclass_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
@@ -104,7 +105,7 @@ class DrawerMenu {
           title: Text('過去戦績確認',
             textScaleFactor: 1,),
           onTap: () {
-            Get.off(() => MyBattleRecord());
+            Get.off(() => MyBattleRecordView());
             print("2-1");
           },
         ),
