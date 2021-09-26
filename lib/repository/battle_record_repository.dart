@@ -25,7 +25,7 @@ class BattleRecordRepository extends BasicDatabase {
     DatabaseUtil.createTable(db, 1);
   }
 
-  /// 過去1年分の総合戦績データを取得する.
+  /// 総合戦績画面で使用する過去1年分の総合戦績データを取得する.
   ///
   Future<List<BattleRecord>> getRecordUsesAllDataView(
       {int numberOfPlayer = 6, int durationDays = -365, bool isChosenGround = true}) async {
@@ -38,6 +38,24 @@ class BattleRecordRepository extends BasicDatabase {
         DatabaseEnv.battleRecordTable,
         where: _where,
         whereArgs: [numberOfPlayer, DateTimeUtil.dateTimeConvertToUnixTime(_dateTime)]);
+    List<BattleRecord> _list = [];
+    map.forEach((e) {
+      _list.add(BattleRecord.fromDynamic(e));
+    });
+    return _list;
+  }
+
+  /// マップ別戦績画面で使用する過去1年分の総合戦績データを取得する.
+  ///
+  Future<List<BattleRecord>> getRecordUsesFocusOnMapView(
+      {required int numberOfPlayer, required int mapId, int durationDays = -365}) async {
+    DateTime _dateTime = DateTime.now().add(Duration(days: durationDays));
+    String _where = "number_of_player = ? AND map_id = ? AND insert_date_unix >= ? AND is_deleted = 0";
+    db = await database;
+    List<Map<String, dynamic>> map = await db.query(
+        DatabaseEnv.battleRecordTable,
+        where: _where,
+        whereArgs: [numberOfPlayer, mapId, DateTimeUtil.dateTimeConvertToUnixTime(_dateTime)]);
     List<BattleRecord> _list = [];
     map.forEach((e) {
       _list.add(BattleRecord.fromDynamic(e));
@@ -112,7 +130,7 @@ class BattleRecordRepository extends BasicDatabase {
           (rand.nextInt(3) + 1),
           (mapList..shuffle()).first,
           (costList..shuffle()).first,
-          6,
+          (numberOfPlayerList..shuffle()).first,
           (sideList..shuffle()).first,
           (formationList..shuffle()).first,
           (rand.nextInt(6)),

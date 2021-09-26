@@ -11,13 +11,17 @@ class NumberOfSortiesAndWinRate extends StatelessWidget {
       required int this.numberOfSortie,
       required double this.winRate,
       required int this.numberOfWin,
-      required int this.numberOfLose})
+      required int this.numberOfLose,
+      double? this.teamAWinRate,
+      double? this.teamBWinRate})
       : super(key: key);
 
   final numberOfSortie;
   final numberOfWin;
   final numberOfLose;
   final winRate;
+  final teamAWinRate;
+  final teamBWinRate;
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +112,50 @@ class NumberOfSortiesAndWinRate extends StatelessWidget {
                   flex: 2,
                   child: myText.Text(
                       "${NumericConversionUtil.numConvertToPercentage(winRate)}",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: ScreenEnv.deviceWidth * 0.04)),
+                ),
+              ],
+            ),
+          ),
+          if (teamAWinRate != null) Padding(
+            padding: EdgeInsets.all(ScreenEnv.deviceWidth * 0.02),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: myText.Text("A側勝率：",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: ScreenEnv.deviceWidth * 0.04)),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: myText.Text(
+                      "${NumericConversionUtil.numConvertToPercentage(teamAWinRate)}",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: ScreenEnv.deviceWidth * 0.04)),
+                ),
+              ],
+            ),
+          ),
+          if (teamBWinRate != null) Padding(
+            padding: EdgeInsets.all(ScreenEnv.deviceWidth * 0.02),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: myText.Text("B側勝率：",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: ScreenEnv.deviceWidth * 0.04)),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: myText.Text(
+                      "${NumericConversionUtil.numConvertToPercentage(teamBWinRate)}",
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: ScreenEnv.deviceWidth * 0.04)),

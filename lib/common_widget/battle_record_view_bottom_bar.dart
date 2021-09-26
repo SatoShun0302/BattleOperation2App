@@ -3,7 +3,7 @@ import 'package:battle_operation2_app/components/main_feature/battle_record_view
 import 'package:battle_operation2_app/components/main_feature/battle_record_view/view_data_focus_on_cost.dart';
 import 'package:battle_operation2_app/config/screen_env.dart';
 import 'package:battle_operation2_app/controller/my_battle_record_add_controller.dart';
-import 'package:battle_operation2_app/controller/all_data_view_controller.dart';
+import 'package:battle_operation2_app/controller/view_data_all_controller.dart';
 import 'package:battle_operation2_app/controller/parts/battle_record_view_bottom_controller.dart';
 import 'package:battle_operation2_app/helper/calculation_util.dart';
 import 'package:battle_operation2_app/helper/datetime_util.dart';

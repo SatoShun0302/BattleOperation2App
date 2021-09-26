@@ -1,6 +1,7 @@
 import 'package:battle_operation2_app/common_widget/drawer_menu.dart';
-import 'package:battle_operation2_app/controller/all_data_view_controller.dart';
+import 'package:battle_operation2_app/controller/view_data_all_controller.dart';
 import 'package:battle_operation2_app/controller/parts/battle_record_view_bottom_controller.dart';
+import 'package:battle_operation2_app/controller/view_data_focus_on_map_controller.dart';
 import 'package:battle_operation2_app/importer/myclass_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
 import 'package:battle_operation2_app/repository/map_list_repository.dart';
@@ -68,6 +69,7 @@ Future<void> main() async {
   // メイン画面
   Get.put(MyBattleRecordAddController(), tag: "myBattleRecordAdd");
   Get.put(AllDataViewController(), tag: "allDataView");
+  Get.put(ViewDataFocusOnMapController(), tag: "mapDataView");
   // パーツ
   Get.put(BattleRecordViewBottomController(), tag: "battleRecordViewBottomNavigation");
 

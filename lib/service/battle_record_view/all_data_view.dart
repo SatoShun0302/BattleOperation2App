@@ -1,12 +1,15 @@
 
 import 'package:battle_operation2_app/chart_model/mobile_suit_type_win_rate_chart.dart';
+import 'package:battle_operation2_app/chart_model/not_highest_rank_player_win_rate_chart.dart';
 import 'package:battle_operation2_app/chart_model/time_frame_win_rate_chart.dart';
 import 'package:battle_operation2_app/chart_model/weekdays_win_rate_chart.dart';
 import 'package:battle_operation2_app/common_widget/battle_record_view/number_of_sorties_and_win_rate.dart';
+import 'package:battle_operation2_app/common_widget/battle_record_view/win_rate_area_chart.dart';
 import 'package:battle_operation2_app/common_widget/battle_record_view/win_rate_column_chart.dart';
 import 'package:battle_operation2_app/common_widget/battle_record_view/win_rate_line_chart.dart';
 import 'package:battle_operation2_app/common_widget/battle_record_view/win_rate_pie_chart.dart';
 import 'package:battle_operation2_app/common_widget/custom/custom_container.dart';
+import 'package:battle_operation2_app/common_widget/headline.dart';
 import 'package:battle_operation2_app/config/enums.dart';
 import 'package:battle_operation2_app/config/screen_env.dart';
 import 'package:battle_operation2_app/entity/battle_record.dart';
@@ -18,7 +21,7 @@ import 'package:battle_operation2_app/importer/dart_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class AllGroundDataView5 {
+class AllDataView {
 
   /// レコード数(出撃回数)
   int totalRecordNum = 0;
@@ -29,7 +32,7 @@ class AllGroundDataView5 {
   /// 敗北数
   int totalLoseNum = 0;
 
-  /// 勝率, 勝利数/出撃回数*100, 少数第二位まで表示.
+  /// 勝率.
   double winRate = 0.0;
 
   /**
@@ -163,7 +166,7 @@ class AllGroundDataView5 {
   /// 最高レート帯以外の味方の人数毎の勝利回数.
   Map<int, int> numberOfWinPerNotHighestRankPlayer = {};
 
-  /// 自チームが5人だった試合のデータを作成する.
+  /// 試合のデータを作成する.
   bool init(List<BattleRecord> records) {
     bool _isNotDataNull = false;
     if (records.isEmpty) {
@@ -259,23 +262,29 @@ class AllGroundDataView5 {
           }
         }
       });
-      // 勝率などを計算する
+      // 勝率を計算する
       winRate = CalculationUtil.division(totalWinNum, totalRecordNum) ?? 0;
       return true;
     }
   }
 
-  /// 地上かつプレイヤー数5人の場合の画面を返す.
-  Widget allGroundDataViewBody() {
+  /// 画面を返す.
+  Widget allDataViewBody() {
     return CustomContainer(
       leftMargin: ScreenEnv.deviceWidth * 0.02,
       rightMargin: ScreenEnv.deviceWidth * 0.02,
       widget: Column(
         children: <Widget>[
+          HeadLine(text: '■ 基本情報', textColor: Colors.lightGreen),
           _topInformation(),
+          HeadLine(text: '■ MSタイプ別勝率', textColor: Colors.lightGreen),
           _msTypeWinRateCircularChartFive(),
+          HeadLine(text: '■ 時間帯別勝率', textColor: Colors.lightGreen),
           _timeFrameChart(),
-          _weekdaysChart()
+          HeadLine(text: '■ 曜日別勝率', textColor: Colors.lightGreen),
+          _weekdaysChart(),
+          HeadLine(text: '■ 最高レート帯未満の味方数別勝率', textColor: Colors.lightGreen, size: HeadLineSize.Small),
+          _notHighestRankPlayerChart()
         ],
       ),
     );
@@ -353,5 +362,22 @@ class AllGroundDataView5 {
       _data.add(_chartData);
     });
     return WinRateColumnChart(listData: _data,);
+  }
+
+  /// 最高レート帯以外の味方数別の勝率をもとに作成したエリアチャートを返す.
+  Widget _notHighestRankPlayerChart() {
+    List<NotHighestRankPlayerWinRateChart> _data = [];
+    numberOfSallyPerNotHighestRankPlayer.forEach((numberOfPlayer, numberOfSally) {
+      int _numberOfWin = numberOfWinPerNotHighestRankPlayer.containsKey(numberOfPlayer) ?
+      numberOfWinPerNotHighestRankPlayer[numberOfPlayer]! : 0;
+      double _winRate = CalculationUtil.division(_numberOfWin, numberOfSally) ?? 0;
+      NotHighestRankPlayerWinRateChart _chart = NotHighestRankPlayerWinRateChart(
+          x: numberOfPlayer,
+          y: (_winRate*100).floor()
+      );
+      _data.add(_chart);
+    });
+    _data.sort((a, b) => a.x.compareTo(b.x));
+    return WinRateAreaChart(listData: _data);
   }
 }
