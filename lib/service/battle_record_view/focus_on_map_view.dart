@@ -1,9 +1,16 @@
+import 'dart:collection';
+
+import 'package:battle_operation2_app/chart_model/focus_on_map_win_rate_chart.dart';
+import 'package:battle_operation2_app/chart_model/mobile_suit_type_win_rate_chart.dart';
 import 'package:battle_operation2_app/common_widget/battle_record_view/number_of_sorties_and_win_rate.dart';
+import 'package:battle_operation2_app/common_widget/battle_record_view/win_rate_pie_chart.dart';
+import 'package:battle_operation2_app/common_widget/battle_record_view/win_rate_three_line_chart.dart';
 import 'package:battle_operation2_app/config/enums.dart';
 import 'package:battle_operation2_app/entity/battle_record.dart';
 import 'package:battle_operation2_app/helper/calculation_util.dart';
 import 'package:battle_operation2_app/helper/datetime_util.dart';
 import 'package:battle_operation2_app/helper/enum_util.dart';
+import 'package:battle_operation2_app/helper/numeric_conversion_util.dart';
 import 'package:battle_operation2_app/importer/dart_importer.dart';
 
 ///
@@ -41,7 +48,6 @@ class FocusOnMapView {
   /**
    * MSタイプ別勝率グラフデータ用
    */
-
   /// コスト毎の強襲出撃回数.
   Map<int, int> numberOfSallyRaidPerCost = {};
 
@@ -63,12 +69,14 @@ class FocusOnMapView {
   /**
    * 編成別グラフデータ用
    */
-
   /// 編成毎の出撃回数.
   Map<int, Map<int, int>> numberOfSallyFormationPerCost = {};
 
   /// 編成毎の勝利回数.
   Map<int, Map<int, int>> numberOfWinFormationPerCost = {};
+
+  /// 編成毎の勝率.
+  List<Map<String, dynamic>> winRateFormationPerCost = [];
 
   /// 試合のデータを作成する.
   bool init(List<BattleRecord> records) {
@@ -198,15 +206,35 @@ class FocusOnMapView {
         }
       });
       // 勝率を計算する
-      winRate = CalculationUtil.division(totalWinNum, totalRecordNum) ?? 0;
-      teamAWinRate = CalculationUtil.division(teamAWinNum, teamARecordNum) ?? 0;
-      teamBWinRate = CalculationUtil.division(teamBWinNum, teamBRecordNum) ?? 0;
+      winRate = CalculationUtil.division(totalWinNum, totalRecordNum) ?? 0.0;
+      teamAWinRate = CalculationUtil.division(teamAWinNum, teamARecordNum) ?? 0.0;
+      teamBWinRate = CalculationUtil.division(teamBWinNum, teamBRecordNum) ?? 0.0;
+
+      // コスト毎編成別勝率
+      numberOfSallyFormationPerCost.forEach((cost, map) {
+        // cost別の勝率を格納するMap
+        Map<String, dynamic> _winRatePerFormationPerCostMap = {};
+        // formation別の勝率を格納するMap
+        Map<int, double> _winRatePerFormationMap = {};
+        map.forEach((formation, numberOfSally) {
+          Map<int, int> _numberOfWinMap = numberOfWinFormationPerCost.containsKey(cost) ? numberOfWinFormationPerCost[cost]! : {};
+          int _numberOfWin = _numberOfWinMap.containsKey(formation) ? _numberOfWinMap[formation]! : 0;
+          double _winRate = CalculationUtil.division(_numberOfWin, numberOfSally) ?? 0.0;
+          _winRatePerFormationMap[formation] = _winRate;
+        });
+        // costをkeyにして、formation別の勝率Mapを格納する
+        _winRatePerFormationPerCostMap["cost"] = cost;
+        _winRatePerFormationPerCostMap["winRate"] = _winRatePerFormationMap;
+        winRateFormationPerCost.add(_winRatePerFormationPerCostMap);
+      });
+      winRateFormationPerCost.sort((a, b) => a["cost"].compareTo(b["cost"]));
       return true;
     }
   }
 
   /// 出撃回数と勝率を表示するエリアを返す.
   Widget topInformation() {
+    mapWinRateThreeLineChart();
     return NumberOfSortiesAndWinRate(
       numberOfSortie: totalRecordNum,
       numberOfWin: totalWinNum,
@@ -216,4 +244,108 @@ class FocusOnMapView {
       teamBWinRate: teamBWinRate,
     );
   }
+
+  /// MSタイプ毎の勝率をもとに作成した円グラフを返す.
+  Widget msTypeWinRateCircularChart() {
+    List<MobileSuitTypeWinRateChart> _data = [];
+    int _winNumWhileUsingRaid = 0;
+    int _winNumWhileUsingGeneral = 0;
+    int _winNumWhileUsingSupport = 0;
+    int _numberOfRaidUses = 0;
+    int _numberOfGeneralUses = 0;
+    int _numberOfSupportUses = 0;
+
+    // MSタイプ毎の出撃数と勝利回数を算出.
+    numberOfSallyRaidPerCost.forEach((cost, numberOfSally) {
+      _numberOfRaidUses += numberOfSally;
+    });
+    numberOfSallyGeneralPerCost.forEach((cost, numberOfSally) {
+      _numberOfGeneralUses += numberOfSally;
+    });
+    numberOfSallySupportPerCost.forEach((cost, numberOfSally) {
+      _numberOfSupportUses += numberOfSally;
+    });
+    numberOfWinRaidPerCost.forEach((cost, numberOfWin) {
+      _winNumWhileUsingRaid += numberOfWin;
+    });
+    numberOfWinGeneralPerCost.forEach((cost, numberOfWin) {
+      _winNumWhileUsingGeneral += numberOfWin;
+    });
+    numberOfWinSupportPerCost.forEach((cost, numberOfWin) {
+      _winNumWhileUsingSupport += numberOfWin;
+    });
+
+    // 強襲,汎用,支援の勝率を計算し、モデルクラスのインスタンスをそれぞれ作成する
+    double _winRateWhileUsingRaid = CalculationUtil.division(_winNumWhileUsingRaid, _numberOfRaidUses) ?? 0;
+    double _winRateWhileUsingGeneral = CalculationUtil.division(_winNumWhileUsingGeneral, _numberOfGeneralUses) ?? 0;
+    double _winRateWhileUsingSupport = CalculationUtil.division(_winNumWhileUsingSupport, _numberOfSupportUses) ?? 0;
+    var raidChart = MobileSuitTypeWinRateChart(
+        x: EnumUtil.getMobileSuitType(MobileSuitType.Raid),
+        y: _winRateWhileUsingRaid*100.floor(),
+        pointColor: MobileSuitType.Raid.msTypeColor,
+        text: "${EnumUtil.getMobileSuitType(MobileSuitType.Raid)}:${NumericConversionUtil.numConvertToPercentage(_winRateWhileUsingRaid)}"
+    );
+    _data.add(raidChart);
+    var generalChart = MobileSuitTypeWinRateChart(
+        x: EnumUtil.getMobileSuitType(MobileSuitType.General),
+        y: _winRateWhileUsingGeneral*100.floor(),
+        pointColor: MobileSuitType.General.msTypeColor,
+        text: "${EnumUtil.getMobileSuitType(MobileSuitType.General)}:${NumericConversionUtil.numConvertToPercentage(_winRateWhileUsingGeneral)}"
+    );
+    _data.add(generalChart);
+    var supportChart = MobileSuitTypeWinRateChart(
+        x: EnumUtil.getMobileSuitType(MobileSuitType.Support),
+        y: _winRateWhileUsingSupport*100.floor(),
+        pointColor: MobileSuitType.Support.msTypeColor,
+        text: "${EnumUtil.getMobileSuitType(MobileSuitType.Support)}:${NumericConversionUtil.numConvertToPercentage(_winRateWhileUsingSupport)}"
+    );
+    _data.add(supportChart);
+    return WinRatePieChart(title: "MS種別毎勝率", listData: _data);
+  }
+
+  Widget mapWinRateThreeLineChart() {
+    List<FocusOnMapWinRateChart> _data = [];
+    Map<int, int> _addAllMap = {};
+    _addAllMap.addAll(numberOfSallyRaidPerCost);
+    _addAllMap.addAll(numberOfSallyGeneralPerCost);
+    _addAllMap.addAll(numberOfSallySupportPerCost);
+    List<int> _keys = _addAllMap.isNotEmpty ? _addAllMap.keys.toList() : [];
+    _keys.sort((a, b) => a.compareTo(b));
+    _keys.forEach((cost) {
+      // 強襲使用時の勝率
+      int _numberOfSallyRaid = numberOfSallyRaidPerCost[cost] ?? 0;
+      int _numberOfWinRaid = numberOfWinRaidPerCost[cost] ?? 0;
+      double _winRateRaid = CalculationUtil.division(_numberOfWinRaid, _numberOfSallyRaid) ?? 0;
+      // 汎用使用時の勝率
+      int _numberOfSallyGeneral = numberOfSallyGeneralPerCost[cost] ?? 0;
+      int _numberOfWinGeneral = numberOfWinGeneralPerCost[cost] ?? 0;
+      double _winRateGeneral = CalculationUtil.division(_numberOfWinGeneral, _numberOfSallyGeneral) ?? 0;
+      // 支援使用時の勝率
+      int _numberOfSallySupport = numberOfSallySupportPerCost[cost] ?? 0;
+      int _numberOfWinSupport = numberOfWinSupportPerCost[cost] ?? 0;
+      double _winRateSupport = CalculationUtil.division(_numberOfWinSupport, _numberOfSallySupport) ?? 0;
+      var chartModel = FocusOnMapWinRateChart(x: cost, y: _winRateRaid*100.floor(), y2: _winRateGeneral*100.floor(), y3: _winRateSupport*100.floor());
+      _data.add(chartModel);
+    });
+    return WinRateThreeLineChart(listData: _data);
+  }
+
+  void formationWinRateInfoPerCost() {
+    numberOfWinFormationPerCost = SplayTreeMap.from(numberOfWinFormationPerCost);
+    //
+    numberOfWinFormationPerCost.forEach((cost, map) {
+      //print("cost: $cost");
+      SplayTreeMap.from(map);
+      map.forEach((formation, numberOfWin) {
+        //print("key: $key stringValue: ${NumericConversionUtil.formationConvertToMap(key)}");
+        //print("value: $value");
+      });
+    });
+  }
+
 }
+// /// 編成毎の出撃回数.
+// Map<int, Map<int, int>> numberOfSallyFormationPerCost = {};
+//
+// /// 編成毎の勝利回数.
+// Map<int, Map<int, int>> numberOfWinFormationPerCost = {};

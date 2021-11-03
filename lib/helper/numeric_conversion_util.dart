@@ -1,4 +1,8 @@
 
+import 'package:battle_operation2_app/config/enums.dart';
+
+import 'enum_util.dart';
+
 class NumericConversionUtil {
 
   /// 数値を受け取り、"勝利"または"敗北"の文字列を返す.
@@ -20,30 +24,46 @@ class NumericConversionUtil {
   /// 桁数が1~3でない場合はnullを返す為、呼び出し元でnullチェック必須.
   /// @param formation
   /// @return Map<int, int> デフォルト {1: 0, 2: 0, 3: 0}
-  static Map<int, int>? formationConvertToMap(int formation) {
-    Map<int, int> _map = {1: 0, 2:0, 3:0};
+  static Map<String, int>? formationConvertToMap(int formation) {
+    Map<String, int> _map = {MobileSuitType.Raid.nameEn: 0, MobileSuitType.General.nameEn: 0, MobileSuitType.Support.nameEn: 0};
     int _length = formation.toString().length;
      //最大3桁, 100の位が強襲機の数, 10の位が汎用機の数, 1の位が支援機の数を表す.
     if (_length == 1) {
-      _map[3] = formation;
+      _map[MobileSuitType.Support.nameEn] = formation;
     } else if (_length == 2) {
       String _formation = formation.toString();
       String _tensPlace = _formation.substring(0,1);
       String _onesPlace = _formation.substring(1,2);
-      _map[2] = int.parse(_tensPlace);
-      _map[3] = int.parse(_onesPlace);
+      _map[MobileSuitType.General.nameEn] = int.parse(_tensPlace);
+      _map[MobileSuitType.Support.nameEn] = int.parse(_onesPlace);
     } else if (_length == 3) {
       String _formation = formation.toString();
       String _hundredPlace = _formation.substring(0,1);
       String _tensPlace = _formation.substring(1,2);
       String _onesPlace = _formation.substring(2,3);
-      _map[1] = int.parse(_hundredPlace);
-      _map[2] = int.parse(_tensPlace);
-      _map[3] = int.parse(_onesPlace);
+      _map[MobileSuitType.Raid.nameEn] = int.parse(_hundredPlace);
+      _map[MobileSuitType.General.nameEn] = int.parse(_tensPlace);
+      _map[MobileSuitType.Support.nameEn] = int.parse(_onesPlace);
     } else {
       return null;
     }
     return _map;
+  }
+
+  static String formationMapConvertToString(Map<int, int> formationMap) {
+    String? _text;
+    formationMap.forEach((msTypeNum, num) {
+      MobileSuitType? _mobileSuitTypeEnum = EnumUtil.getMobileSuitTypeByNum(msTypeNum);
+      String? _mobileSuitType = _mobileSuitTypeEnum != null ? EnumUtil.getMobileSuitType(_mobileSuitTypeEnum) : null;
+      if (_text == null) {
+        _text = _mobileSuitType;
+      } else {
+        if (_mobileSuitType != null) {
+          _text = _text! + "$_mobileSuitType";
+        }
+      }
+    });
+    return _text ?? "データがありません";
   }
 
   /// 数値を受け取り、パーセンテージに変換したStringを返す.

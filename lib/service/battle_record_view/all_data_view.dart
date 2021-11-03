@@ -65,9 +65,6 @@ class AllDataView {
   /// 支援機搭乗時の勝率(除法の結果, 100は掛けていない).
   double winRateWhileUsingSupport = 0.0;
 
-  /// MSタイプ別の勝率データを保持するリスト.
-  List<MobileSuitTypeWinRateChart> msTypeWinRateData = [];
-
   /**
    * 時間帯別グラフデータ用
    */
@@ -278,7 +275,7 @@ class AllDataView {
           HeadLine(text: '■ 基本情報', textColor: Colors.lightGreen),
           _topInformation(),
           HeadLine(text: '■ MSタイプ別勝率', textColor: Colors.lightGreen),
-          _msTypeWinRateCircularChartFive(),
+          _msTypeWinRateCircularChart(),
           HeadLine(text: '■ 時間帯別勝率', textColor: Colors.lightGreen),
           _timeFrameChart(),
           HeadLine(text: '■ 曜日別勝率', textColor: Colors.lightGreen),
@@ -300,9 +297,8 @@ class AllDataView {
   }
 
   /// MSタイプ毎の勝率をもとに作成した円グラフを返す.
-  Widget _msTypeWinRateCircularChartFive() {
+  Widget _msTypeWinRateCircularChart() {
     List<MobileSuitTypeWinRateChart> _data = [];
-    //if (msTypeWinRateData.isEmpty) {
       // 強襲,汎用,支援の勝率を計算し、モデルクラスのインスタンスをそれぞれ作成する
       winRateWhileUsingRaid = CalculationUtil.division(winNumWhileUsingRaid, numberOfRaidUses) ?? 0;
       winRateWhileUsingGeneral = CalculationUtil.division(winNumWhileUsingGeneral, numberOfGeneralUses) ?? 0;
@@ -328,9 +324,6 @@ class AllDataView {
           text: "${EnumUtil.getMobileSuitType(MobileSuitType.Support)}:${NumericConversionUtil.numConvertToPercentage(winRateWhileUsingSupport)}"
       );
       _data.add(supportChart);
-    //} else {
-    //  _data = msTypeWinRateData;
-    //}
     return WinRatePieChart(title: "MS種別毎勝率", listData: _data);
   }
 

@@ -45,7 +45,6 @@ class _WinRatePieChartState extends State<WinRatePieChart> {
     return SfCircularChart(
       selectionGesture: ActivationMode.singleTap,
       enableMultiSelection: enableMultiSelect,
-      borderColor: Colors.cyanAccent,
       series: <PieSeries<MobileSuitTypeWinRateChart, String>>[
         PieSeries<MobileSuitTypeWinRateChart, String>(
             dataSource: listData,
@@ -60,6 +59,7 @@ class _WinRatePieChartState extends State<WinRatePieChart> {
             data.y,
             dataLabelMapper: (MobileSuitTypeWinRateChart data, _) =>
             data.text,
+            animationDuration: 800,
             dataLabelSettings: DataLabelSettings(
                 isVisible: true,
                 labelPosition: ChartDataLabelPosition.outside,

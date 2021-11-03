@@ -1,6 +1,8 @@
 /**
  * enumは全てこのファイルに定義する
  */
+import 'package:battle_operation2_app/importer/dart_importer.dart';
+
 /// null safety版ではクラス及びメソッドが定義されていないファイルのexportができないため
 /// dummyクラスとdummyメソッドを記述する
 class dummyEnum {
@@ -11,6 +13,42 @@ enum MobileSuitType {
   General,
   Support,
   Raid
+}
+extension MobileSuitTypeExtension on MobileSuitType {
+  /// MSタイプ　英語
+  String get nameEn {
+    switch (this) {
+      case MobileSuitType.Raid:
+        return "Raid";
+      case MobileSuitType.General:
+        return "General";
+      case MobileSuitType.Support:
+        return "Support";
+    }
+  }
+
+  /// MSタイプ 日本語（省略形）
+  String get nameJaShortened {
+    switch (this) {
+      case MobileSuitType.Raid:
+        return "強";
+      case MobileSuitType.General:
+        return "汎";
+      case MobileSuitType.Support:
+        return "支";
+    }
+  }
+
+  Color get msTypeColor {
+    switch (this) {
+      case MobileSuitType.Raid:
+        return Color.fromRGBO(203,0,0,1);
+      case MobileSuitType.General:
+        return Color.fromRGBO(0,101,203,1);
+      case MobileSuitType.Support:
+        return Color.fromRGBO(203,203,0,1);
+    }
+  }
 }
 
 /// 戦場のタイプ

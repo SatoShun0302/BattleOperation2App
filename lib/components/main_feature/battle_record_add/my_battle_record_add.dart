@@ -61,7 +61,6 @@ class MyBattleRecordAdd extends StatelessWidget {
                               value: c.choosedMapId.value,
                               onChanged: (int? value) => {
                                 c.choosedMapId.value = value!,
-                                print(c.choosedMapId.value),
                               },
                             ),
                           ),

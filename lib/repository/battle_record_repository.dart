@@ -66,7 +66,7 @@ class BattleRecordRepository extends BasicDatabase {
   /// テストデータ挿入
   void initInsertTestRecords() async {
     db = await database;
-    // 2ヶ月分（1日5件*60日＝300件)のテストデータを作成する
+    // 2ヶ月分（1日10件*60日＝600件)のテストデータを作成する
     int counter = 0;
     DateTime today = new DateTime.now();
     List<BattleRecord> records = [];
@@ -102,14 +102,14 @@ class BattleRecordRepository extends BasicDatabase {
       650,
       700
     ];
-    List<int> numberOfPlayerList = [5, 6];
     List<String> sideList = ["A", "B"];
     List<int> formationList = [141, 231, 51, 132];
+    List<int> formationList2 = [131, 221, 41, 14];
     List<int> winOrLose = [0, 1];
     int rateResult = 2400;
     var rand = new math.Random();
-    for (int i = 0; i < 300; i++) {
-      if (counter >= 5) {
+    for (int i = 0; i < 600; i++) {
+      if (counter >= 10) {
         today = today.add(Duration(days: 1) * -1);
         counter = 0;
         int _hour = rand.nextInt(24);
@@ -130,7 +130,7 @@ class BattleRecordRepository extends BasicDatabase {
           (rand.nextInt(3) + 1),
           (mapList..shuffle()).first,
           (costList..shuffle()).first,
-          (numberOfPlayerList..shuffle()).first,
+          6,
           (sideList..shuffle()).first,
           (formationList..shuffle()).first,
           (rand.nextInt(6)),
@@ -159,7 +159,43 @@ class BattleRecordRepository extends BasicDatabase {
           today.weekday,
           DateTimeUtil.dateTimeConvertToUnixTime(today),
           0);
+      BattleRecord battleRecord2 = new BattleRecord(
+          null,
+          (rand.nextInt(49) + 1),
+          (rand.nextInt(3) + 1),
+          (mapList..shuffle()).first,
+          (costList..shuffle()).first,
+          5,
+          (sideList..shuffle()).first,
+          (formationList2..shuffle()).first,
+          (rand.nextInt(6)),
+          (winOrLose..shuffle()).first,
+          winOrLoseResult,
+          ([0, 1]..shuffle()).first,
+          ([0, 1]..shuffle()).first,
+          (rand.nextInt(12) + 1),
+          (rand.nextInt(12) + 1),
+          (rand.nextInt(1200)),
+          (rand.nextInt(12) + 1),
+          (rand.nextInt(1000)),
+          (rand.nextInt(12) + 1),
+          (rand.nextInt(80000) + 10000),
+          (rand.nextInt(12) + 1),
+          (rand.nextDouble() * 100),
+          (rand.nextInt(12) + 1),
+          (rand.nextInt(6)),
+          (rand.nextInt(12) + 1),
+          (rand.nextInt(6)),
+          (rand.nextInt(12) + 1),
+          (rand.nextInt(1500)),
+          rateResult,
+          riseAndFall,
+          today.hour,
+          today.weekday,
+          DateTimeUtil.dateTimeConvertToUnixTime(today)+1,
+          0);
       records.add(battleRecord);
+      records.add(battleRecord2);
       counter++;
     }
     // DBにレコードを挿入する
