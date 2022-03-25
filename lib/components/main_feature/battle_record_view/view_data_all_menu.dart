@@ -2,6 +2,7 @@ import 'package:battle_operation2_app/common_widget/headline.dart';
 import 'package:battle_operation2_app/common_widget/submit_button.dart';
 import 'package:battle_operation2_app/components/main_feature/battle_record_view/my_battle_record_view.dart';
 import 'package:battle_operation2_app/components/main_feature/battle_record_view/view_data_all.dart';
+import 'package:battle_operation2_app/config/screen_env.dart';
 import 'package:battle_operation2_app/controller/view_data_all_controller.dart';
 import 'package:battle_operation2_app/importer/dart_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
@@ -18,6 +19,7 @@ class ViewDataAllMenu extends StatelessWidget {
 
     return IconButton(
         icon: Icon(Icons.add),
+        padding: EdgeInsets.only(top: ScreenEnv.deviceWidth * 0.02),
         onPressed: () {
           Get.bottomSheet(
             SingleChildScrollView(

@@ -2,6 +2,7 @@ import 'package:battle_operation2_app/common_widget/headline.dart';
 import 'package:battle_operation2_app/common_widget/submit_button.dart';
 import 'package:battle_operation2_app/components/main_feature/battle_record_view/my_battle_record_view.dart';
 import 'package:battle_operation2_app/components/main_feature/battle_record_view/view_data_all.dart';
+import 'package:battle_operation2_app/config/screen_env.dart';
 import 'package:battle_operation2_app/controller/view_data_all_controller.dart';
 import 'package:battle_operation2_app/controller/view_data_focus_on_map_controller.dart';
 import 'package:battle_operation2_app/importer/dart_importer.dart';
@@ -18,6 +19,7 @@ class ViewDataFocusOnMapMenu extends StatelessWidget {
     Get.find(tag: "mapDataView");
     return IconButton(
         icon: Icon(Icons.build),
+        padding: EdgeInsets.only(top: ScreenEnv.deviceWidth * 0.02),
         onPressed: () {
           Get.bottomSheet(
             SingleChildScrollView(

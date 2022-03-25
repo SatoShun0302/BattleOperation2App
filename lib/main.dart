@@ -10,7 +10,9 @@ import 'package:battle_operation2_app/service/init_function/check_vote_right.dar
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'controller/common/mobile_suit_controller.dart';
 import 'controller/my_battle_record_add_controller.dart';
+import 'controller/view_data_focus_on_ms_controller.dart';
 import 'repository/ms_type_list_repository.dart';
 
 Future<void> main() async {
@@ -66,10 +68,13 @@ Future<void> main() async {
   /**
    * コントローラーを定義する
    */
+  // 共通
+  Get.put(MobileSuitController(), tag:"mobileSuit");
   // メイン画面
   Get.put(MyBattleRecordAddController(), tag: "myBattleRecordAdd");
   Get.put(AllDataViewController(), tag: "allDataView");
   Get.put(ViewDataFocusOnMapController(), tag: "mapDataView");
+  Get.put(ViewDataFocusOnMsController(), tag: "msDataView");
   // パーツ
   Get.put(BattleRecordViewBottomController(), tag: "battleRecordViewBottomNavigation");
 

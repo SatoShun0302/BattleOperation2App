@@ -15,7 +15,7 @@ class MsListRepository extends BasicDatabase {
   }
 
   @override
-  String get tableName => DatabaseEnv.stageTable;
+  String get tableName => DatabaseEnv.msListTable;
 
   @override
   createTable(Database db, int version) async {
@@ -25,29 +25,16 @@ class MsListRepository extends BasicDatabase {
 
   /// MSのデータを全件取得する.
   ///
+  /// 機体名での重複を省く.
   /// 論理削除されたデータは含まない.
   Future<List<MobileSuit>> getRecord() async {
     db = await database;
     List<MobileSuit> _msList = [];
-    // 汎用機
-    List<Map<String, dynamic>> generalMsList = await db.query(DatabaseEnv.generalMsTable,
+    List<Map<String, dynamic>> records = await db.query(DatabaseEnv.msListTable,
+        distinct: true,
         where: "is_deleted = 0"
     );
-    generalMsList.forEach((element) {
-      _msList.add(MobileSuit.fromDynamic(element));
-    });
-    // 強襲機
-    List<Map<String, dynamic>> raidMsList = await db.query(DatabaseEnv.raidMsTable,
-        where: "is_deleted = 0"
-    );
-    raidMsList.forEach((element) {
-      _msList.add(MobileSuit.fromDynamic(element));
-    });
-    // 支援機
-    List<Map<String, dynamic>> supportMsList = await db.query(DatabaseEnv.supportMsTable,
-        where: "is_deleted = 0"
-    );
-    supportMsList.forEach((element) {
+    records.forEach((element) {
       _msList.add(MobileSuit.fromDynamic(element));
     });
     return _msList;
@@ -74,6 +61,39 @@ class MsListRepository extends BasicDatabase {
       _msList.add(MobileSuit.fromDynamic(element));
     });
     return _msList;
+  }
+
+  Future<bool> insertRecords(List<MobileSuit> msList) async {
+    db = await database;
+    // DBにレコードを挿入する
+    List<int> insertResultNum = [];
+    await db.transaction((txn) async {
+      try {
+        await Future.forEach(msList, (MobileSuit msList) async {
+          int _id = await txn.rawInsert(
+              'INSERT INTO ${DatabaseEnv.msListTable} VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+              [
+                msList.id,
+                msList.msName,
+                msList.msLevel,
+                msList.msType,
+                msList.canGround,
+                msList.canSpace,
+                msList.cost,
+                msList.officialPicUrl,
+                msList.wikiPicUrl,
+                msList.wikiPageUrl,
+                msList.isFavorite,
+                msList.isDeleted
+              ]);
+          insertResultNum.add(_id);
+        });
+      } catch (e) {
+        print(e);
+        return false;
+      }
+    });
+    return true;
   }
 
   /// 選択されたマップとコストに対応したMSのデータを全件取得する.

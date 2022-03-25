@@ -27,8 +27,8 @@ class BattleRecordViewBottomBar extends StatelessWidget {
       items: [
         TabItem(icon: Icons.analytics_outlined, title: "総合"),
         TabItem(icon: FaIcon(FontAwesomeIcons.globeAsia, color: Colors.white,), title: "マップ別"),
-        TabItem(icon: Icons.analytics_outlined, title: "コスト別"),
-        TabItem(icon: FaIcon(FontAwesomeIcons.splotch, color: Colors.white,), title: "機体別"),
+        TabItem(icon: Icons.analytics_outlined, title: "機体別"),
+        TabItem(icon: FaIcon(FontAwesomeIcons.splotch, color: Colors.white,), title: "対戦履歴"),
       ],
       initialActiveIndex: battleRecordViewBottomController.tabIndex.value,
       onTap: (int i) {
