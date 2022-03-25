@@ -6,7 +6,7 @@ class EnumUtil {
   /// MSタイプを返す
   ///
   /// @param MobileSuitType @return String
-  static String mobileSuitType(MobileSuitType msType) {
+  static String getMobileSuitType(MobileSuitType msType) {
     switch (msType) {
       case MobileSuitType.General:
         return "汎用";
@@ -14,6 +14,23 @@ class EnumUtil {
         return "支援";
       case MobileSuitType.Raid:
         return "強襲";
+    }
+  }
+
+  /// 数値をもとにenum MobileSuitTypeを返す.
+  ///
+  /// @param num 1~3の数字.
+  /// @return enum MobileSuitType または null.
+  static MobileSuitType? getMobileSuitTypeByNum(int num) {
+    switch (num) {
+      case 1:
+        return MobileSuitType.Raid;
+      case 2:
+        return MobileSuitType.General;
+      case 3:
+        return MobileSuitType.Support;
+      default:
+        return null;
     }
   }
 

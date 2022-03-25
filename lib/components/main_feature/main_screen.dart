@@ -18,7 +18,7 @@ class MainScreen extends StatelessWidget {
       ),
       drawer: SafeArea(
         child: Drawer(
-          child: new DrawerMenu().expansionPanelList(),
+          child: DrawerMenu().expansionPanelList(),
         ),
       ),
 

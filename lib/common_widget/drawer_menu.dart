@@ -1,6 +1,12 @@
+import 'package:battle_operation2_app/components/main_feature/battle_record_view/my_battle_record_view.dart';
+import 'package:battle_operation2_app/controller/my_battle_record_add_controller.dart';
 import 'package:battle_operation2_app/importer/myclass_importer.dart';
 import 'package:battle_operation2_app/importer/pub_dev_importer.dart';
 import 'package:battle_operation2_app/importer/dart_importer.dart';
+import 'package:battle_operation2_app/repository/cost_list_repository.dart';
+import 'package:battle_operation2_app/repository/map_list_repository.dart';
+import 'package:battle_operation2_app/repository/ms_list_repository.dart';
+import 'package:battle_operation2_app/repository/ms_type_list_repository.dart';
 
 
 /// ドロワーメニューを共通化
@@ -17,10 +23,29 @@ class DrawerMenu {
           title: Text('トップへ',
             textScaleFactor: 1,),
           onTap: () {
+            Get.off(() => MainScreen());
             print("0-0");
           },
         ),
-        _profileListTile(),
+        ListTile(
+          title: Text('DB作成',
+            textScaleFactor: 1,),
+          onTap: () {
+            MapListRepository mlr = new MapListRepository();
+            mlr.init();
+            MsTypeListRepository mstlr = new MsTypeListRepository();
+            mstlr.initInsertRecords();
+            // 初期マップデータを挿入する
+            mlr.initInsertRecords();
+            // 初期機体データを挿入する
+            MsListRepository mslr = new MsListRepository();
+            mslr.initInsertRecords();
+            // コスト一覧データを挿入する
+            CostListRepository clr = new CostListRepository();
+            clr.initInsertRecords();
+          },
+        ),
+        _profileListTile()!,
         _battleRecordListTile(),
         _voteListTile(),
         _settingListTile(),
@@ -39,9 +64,9 @@ class DrawerMenu {
   }
 
   // プロフィール確認、編集
-  Widget _profileListTile() {
+  Widget? _profileListTile() {
     return ExpansionTile(
-      leading: Icon(Icons.account_circle),
+      leading: FaIcon(FontAwesomeIcons.addressCard),
       childrenPadding: EdgeInsets.only(left: ScreenEnv.deviceWidth * 0.1),
       title: Text(
         'プロフィール',
@@ -80,6 +105,7 @@ class DrawerMenu {
           title: Text('過去戦績確認',
             textScaleFactor: 1,),
           onTap: () {
+            Get.off(() => MyBattleRecordView());
             print("2-1");
           },
         ),
@@ -87,6 +113,9 @@ class DrawerMenu {
           title: Text('試合データ登録',
             textScaleFactor: 1,),
           onTap: () {
+            final MyBattleRecordAddController c = Get.find(tag: "myBattleRecordAdd");
+            c.init();
+            Get.off(() => MyBattleRecordAdd());
             print("2-2");
           },
         )
